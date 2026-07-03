@@ -13,7 +13,7 @@ python -m http.server 5500
 然后访问：
 
 ```text
-http://127.0.0.1:5501/
+http://127.0.0.1:5500/
 ```
 
 ## 题库格式
@@ -90,30 +90,30 @@ http://127.0.0.1:5501/
 20 题、45 分钟模拟考试：
 
 ```text
-http://127.0.0.1:5501/?mode=exam&count=20&minutes=45&start=1
+http://127.0.0.1:5500/?mode=exam&count=20&minutes=45&start=1
 ```
 
 只抽 10 道单选题做模拟考试：
 
 ```text
-http://127.0.0.1:5501/?mode=exam&qtype=single&count=10&start=1
+http://127.0.0.1:5500/?mode=exam&qtype=single&count=10&start=1
 ```
 
 随机 10 道多选题：
 
 ```text
-http://127.0.0.1:5501/?mode=random&qtype=multiple&count=10&start=1
+http://127.0.0.1:5500/?mode=random&qtype=multiple&count=10&start=1
 ```
 
 只应用 CSS 中等难度问答题筛选，不立即开始：
 
 ```text
-http://127.0.0.1:5501/?mode=sequence&qtype=qa&category=CSS&difficulty=medium&start=0
+http://127.0.0.1:5500/?mode=sequence&qtype=qa&category=CSS&difficulty=medium&start=0
 ```
 
 快捷写法：
 
 ```text
-http://127.0.0.1:5501/?exam=30
-http://127.0.0.1:5501/?random=10&qtype=multiple
+http://127.0.0.1:5500/?exam=30
+http://127.0.0.1:5500/?random=10&qtype=multiple
 ```
