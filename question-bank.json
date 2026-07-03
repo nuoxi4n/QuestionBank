@@ -1,0 +1,171 @@
+{
+  "version": "1.0.0",
+  "title": "前端示例题库",
+  "questions": [
+    {
+      "id": "FE001",
+      "type": "single",
+      "category": "HTML",
+      "difficulty": "easy",
+      "stem": "HTML 中用于引入外部样式表的标签是？",
+      "options": [
+        { "key": "A", "text": "<script>" },
+        { "key": "B", "text": "<link>" },
+        { "key": "C", "text": "<style-src>" },
+        { "key": "D", "text": "<css>" }
+      ],
+      "answer": "B",
+      "explanation": "<link rel=\"stylesheet\" href=\"styles.css\"> 用于引入外部 CSS 文件。"
+    },
+    {
+      "id": "FE002",
+      "type": "single",
+      "category": "CSS",
+      "difficulty": "medium",
+      "stem": "实现玻璃拟态中背景模糊效果时，最常用的 CSS 属性是？",
+      "options": [
+        { "key": "A", "text": "filter" },
+        { "key": "B", "text": "backdrop-filter" },
+        { "key": "C", "text": "mix-blend-mode" },
+        { "key": "D", "text": "object-fit" }
+      ],
+      "answer": "B",
+      "explanation": "backdrop-filter 可以对元素背后的内容进行模糊、饱和度等视觉处理。"
+    },
+    {
+      "id": "FE003",
+      "type": "multiple",
+      "category": "JavaScript",
+      "difficulty": "medium",
+      "stem": "以下哪些数组方法通常会返回一个新数组？",
+      "options": [
+        { "key": "A", "text": "map" },
+        { "key": "B", "text": "filter" },
+        { "key": "C", "text": "push" },
+        { "key": "D", "text": "slice" }
+      ],
+      "answer": ["A", "B", "D"],
+      "explanation": "map、filter、slice 返回新数组；push 会修改原数组并返回新长度。"
+    },
+    {
+      "id": "FE004",
+      "type": "multiple",
+      "category": "HTML",
+      "difficulty": "easy",
+      "stem": "以下哪些元素属于语义化 HTML 元素？",
+      "options": [
+        { "key": "A", "text": "<article>" },
+        { "key": "B", "text": "<section>" },
+        { "key": "C", "text": "<div>" },
+        { "key": "D", "text": "<nav>" }
+      ],
+      "answer": ["A", "B", "D"],
+      "explanation": "article、section、nav 都能表达内容含义；div 本身没有语义。"
+    },
+    {
+      "id": "FE005",
+      "type": "single",
+      "category": "浏览器",
+      "difficulty": "medium",
+      "stem": "DOMContentLoaded 事件触发时，下列说法更准确的是？",
+      "options": [
+        { "key": "A", "text": "页面所有图片都已加载完成" },
+        { "key": "B", "text": "初始 HTML 文档已被完整加载和解析" },
+        { "key": "C", "text": "所有异步请求都已结束" },
+        { "key": "D", "text": "CSS 动画已经执行结束" }
+      ],
+      "answer": "B",
+      "explanation": "DOMContentLoaded 关注 DOM 构建完成，不等待图片、子框架等资源全部加载。"
+    },
+    {
+      "id": "FE006",
+      "type": "multiple",
+      "category": "JavaScript",
+      "difficulty": "easy",
+      "stem": "Promise 可能处于哪些状态？",
+      "options": [
+        { "key": "A", "text": "pending" },
+        { "key": "B", "text": "fulfilled" },
+        { "key": "C", "text": "rejected" },
+        { "key": "D", "text": "canceled" }
+      ],
+      "answer": ["A", "B", "C"],
+      "explanation": "Promise 有 pending、fulfilled、rejected 三种状态。"
+    },
+    {
+      "id": "FE007",
+      "type": "single",
+      "category": "CSS",
+      "difficulty": "easy",
+      "stem": "在 Flex 布局中，控制主轴对齐方式的属性是？",
+      "options": [
+        { "key": "A", "text": "align-items" },
+        { "key": "B", "text": "justify-content" },
+        { "key": "C", "text": "place-self" },
+        { "key": "D", "text": "gap" }
+      ],
+      "answer": "B",
+      "explanation": "justify-content 控制主轴方向的对齐；align-items 控制交叉轴方向的对齐。"
+    },
+    {
+      "id": "FE008",
+      "type": "single",
+      "category": "网络",
+      "difficulty": "medium",
+      "stem": "以下哪个 HTTP 方法通常被认为是幂等的？",
+      "options": [
+        { "key": "A", "text": "POST" },
+        { "key": "B", "text": "PATCH" },
+        { "key": "C", "text": "PUT" },
+        { "key": "D", "text": "CONNECT" }
+      ],
+      "answer": "C",
+      "explanation": "PUT 通常用于用请求体替换目标资源，多次执行的最终效果一致。"
+    },
+    {
+      "id": "FE009",
+      "type": "qa",
+      "category": "浏览器",
+      "difficulty": "medium",
+      "stem": "简述 localStorage 与 sessionStorage 的主要区别。",
+      "answer": "localStorage 数据长期保存，除非主动删除；sessionStorage 只在当前页面会话中保存，标签页关闭后通常会被清除。",
+      "keywords": ["localStorage", "sessionStorage", "关闭"],
+      "explanation": "二者都遵循同源策略，常用于保存少量客户端状态。"
+    },
+    {
+      "id": "FE010",
+      "type": "qa",
+      "category": "JavaScript",
+      "difficulty": "hard",
+      "stem": "说明宏任务与微任务在事件循环中的执行顺序。",
+      "answer": "一次事件循环会先执行一个宏任务，随后清空当前产生的微任务队列，再进入渲染或下一轮宏任务。",
+      "keywords": ["宏任务", "微任务", "队列"],
+      "explanation": "Promise 回调属于常见微任务，setTimeout 回调属于常见宏任务。"
+    },
+    {
+      "id": "FE011",
+      "type": "qa",
+      "category": "CSS",
+      "difficulty": "medium",
+      "stem": "简述标准盒模型中 width 的含义。",
+      "answer": "标准盒模型中 width 只表示内容区宽度，不包含 padding、border 和 margin。",
+      "keywords": ["内容", "padding", "border"],
+      "explanation": "可以通过 box-sizing: border-box 让 width 包含内容、padding 与 border。"
+    },
+    {
+      "id": "FE012",
+      "type": "multiple",
+      "category": "可访问性",
+      "difficulty": "medium",
+      "stem": "以下哪些做法有助于提升 Web 可访问性？",
+      "options": [
+        { "key": "A", "text": "为有意义的图片提供 alt 文本" },
+        { "key": "B", "text": "确保交互控件可通过键盘操作" },
+        { "key": "C", "text": "只用颜色表达错误状态" },
+        { "key": "D", "text": "使用语义化标签组织页面结构" }
+      ],
+      "answer": ["A", "B", "D"],
+      "explanation": "颜色不应作为唯一信息来源；语义、键盘可达性和替代文本都很重要。"
+    }
+  ]
+}

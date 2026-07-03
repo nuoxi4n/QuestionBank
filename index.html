@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuestionBank Glass</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script defer src="./app.js"></script>
+  </head>
+  <body>
+    <div class="ambient-layer" aria-hidden="true"></div>
+
+    <main class="app-shell">
+      <header class="topbar glass-surface">
+        <div class="brand-block">
+          <div class="brand-mark" aria-hidden="true">
+            <i data-lucide="layers-3"></i>
+          </div>
+          <div>
+            <p class="eyebrow">QuestionBank</p>
+            <h1>玻璃刷题台</h1>
+          </div>
+        </div>
+
+        <div class="top-actions">
+          <label class="icon-button file-trigger" title="导入 JSON 题库">
+            <i data-lucide="upload"></i>
+            <span>导入</span>
+            <input id="bankFile" type="file" accept=".json,application/json" />
+          </label>
+          <button id="reloadBankBtn" class="icon-button" type="button" title="重新读取 question-bank.json">
+            <i data-lucide="refresh-cw"></i>
+            <span>重载</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <aside class="settings-panel glass-surface">
+          <div class="section-title">
+            <i data-lucide="sliders-horizontal"></i>
+            <span>刷题设置</span>
+          </div>
+
+          <div class="mode-switch" role="tablist" aria-label="刷题模式">
+            <button class="mode-button is-active" type="button" data-mode="sequence">
+              <i data-lucide="list-ordered"></i>
+              <span>顺序</span>
+            </button>
+            <button class="mode-button" type="button" data-mode="random">
+              <i data-lucide="shuffle"></i>
+              <span>随机</span>
+            </button>
+            <button class="mode-button" type="button" data-mode="exam">
+              <i data-lucide="clipboard-check"></i>
+              <span>考试</span>
+            </button>
+          </div>
+
+          <button id="openSettingsBtn" class="secondary-button" type="button">
+            <i data-lucide="settings-2"></i>
+            <span>设置</span>
+          </button>
+
+          <div id="configSummary" class="config-summary"></div>
+
+          <button id="startBtn" class="primary-button" type="button">
+            <i data-lucide="play"></i>
+            <span>开始</span>
+          </button>
+
+          <div class="mini-stats">
+            <div>
+              <span>题库</span>
+              <strong id="bankSize">0</strong>
+            </div>
+            <div>
+              <span>已答</span>
+              <strong id="answeredCount">0</strong>
+            </div>
+            <div>
+              <span>正确</span>
+              <strong id="correctCount">0</strong>
+            </div>
+            <div>
+              <span>正确率</span>
+              <strong id="accuracyRate">0%</strong>
+            </div>
+          </div>
+
+          <div class="bank-status">
+            <span id="bankSource">题库读取中</span>
+          </div>
+        </aside>
+
+        <section class="quiz-panel glass-surface" aria-live="polite">
+          <div class="quiz-header">
+            <div>
+              <p id="modeLabel" class="eyebrow">顺序刷题</p>
+              <h2 id="sessionTitle">准备开始</h2>
+            </div>
+            <div class="quiz-actions">
+              <div id="examTimer" class="exam-timer" hidden>
+                <i data-lucide="timer"></i>
+                <span id="examTimerText">00:00</span>
+              </div>
+              <button id="prevBtn" class="round-button" type="button" title="上一题">
+                <i data-lucide="chevron-left"></i>
+              </button>
+              <button id="nextBtn" class="round-button" type="button" title="下一题">
+                <i data-lucide="chevron-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="progress-track" aria-hidden="true">
+            <span id="progressBar"></span>
+          </div>
+
+          <article id="questionCard" class="question-stage">
+            <div class="empty-state">
+              <i data-lucide="book-open-check"></i>
+              <h3>载入题库后即可开始</h3>
+            </div>
+          </article>
+        </section>
+
+        <aside class="answer-panel glass-surface">
+          <div class="section-title">
+            <i data-lucide="grid-3x3"></i>
+            <span>答题卡</span>
+          </div>
+          <div id="palette" class="question-palette"></div>
+          <div class="result-strip">
+            <div>
+              <span>当前进度</span>
+              <strong id="progressText">0 / 0</strong>
+            </div>
+            <button id="submitExamBtn" class="secondary-button" type="button">
+              <i data-lucide="send"></i>
+              <span>交卷</span>
+            </button>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <dialog id="settingsDialog" class="settings-dialog glass-surface">
+      <button id="closeSettingsBtn" class="dialog-close" type="button" title="关闭">
+        <i data-lucide="x"></i>
+      </button>
+      <p class="eyebrow">Preferences</p>
+      <h2>刷题设置</h2>
+
+      <div class="settings-grid">
+        <section class="settings-group">
+          <div class="section-title">
+            <i data-lucide="filter"></i>
+            <span>筛选</span>
+          </div>
+          <div class="field-stack">
+            <label class="field">
+              <span>题型</span>
+              <select id="questionTypeSelect"></select>
+            </label>
+            <label class="field">
+              <span>分类</span>
+              <select id="categorySelect"></select>
+            </label>
+            <label class="field">
+              <span>难度</span>
+              <select id="difficultySelect"></select>
+            </label>
+          </div>
+        </section>
+
+        <section class="settings-group">
+          <div class="section-title">
+            <i data-lucide="timer"></i>
+            <span>数量与时间</span>
+          </div>
+          <div class="field-stack">
+            <label class="field quantity-field" data-config-for="random">
+              <span>随机数量</span>
+              <input id="randomCount" type="number" min="1" value="10" />
+            </label>
+            <label class="field quantity-field" data-config-for="exam">
+              <span>试卷题数</span>
+              <input id="examCount" type="number" min="1" value="20" />
+            </label>
+            <label class="field exam-only-field" data-config-for="exam">
+              <span>考试时长（分钟）</span>
+              <input id="examMinutes" type="number" min="1" value="45" />
+            </label>
+          </div>
+        </section>
+
+        <section class="settings-group">
+          <div class="section-title">
+            <i data-lucide="keyboard"></i>
+            <span>操作</span>
+          </div>
+          <div class="field-stack">
+            <label class="field">
+              <span>选项快捷键</span>
+              <select id="optionShortcutSelect">
+                <option value="number">数字键 1-9</option>
+                <option value="letter">字母键 A-I</option>
+                <option value="both">数字/字母</option>
+                <option value="off">关闭</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>提交快捷键</span>
+              <select id="submitShortcutSelect">
+                <option value="enter-space">Enter / Space</option>
+                <option value="enter">Enter</option>
+                <option value="space">Space</option>
+                <option value="off">关闭</option>
+              </select>
+            </label>
+            <label class="switch-setting" id="autoNextSetting">
+              <span>提交后自动下一题</span>
+              <input id="autoNextToggle" type="checkbox" checked />
+              <span class="switch-track" aria-hidden="true"></span>
+            </label>
+          </div>
+        </section>
+      </div>
+
+      <div class="dialog-actions">
+        <button id="applySettingsBtn" class="primary-button" type="button">
+          <i data-lucide="check"></i>
+          <span>完成</span>
+        </button>
+      </div>
+    </dialog>
+
+    <dialog id="resultDialog" class="result-dialog glass-surface">
+      <button id="closeResultBtn" class="dialog-close" type="button" title="关闭">
+        <i data-lucide="x"></i>
+      </button>
+      <p class="eyebrow">本次结果</p>
+      <h2 id="resultTitle">已完成</h2>
+      <div class="result-metrics">
+        <div>
+          <span>作答</span>
+          <strong id="resultAnswered">0</strong>
+        </div>
+        <div>
+          <span>正确</span>
+          <strong id="resultCorrect">0</strong>
+        </div>
+        <div>
+          <span>待自评</span>
+          <strong id="resultReview">0</strong>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <button id="reviewBtn" class="secondary-button" type="button">
+          <i data-lucide="search-check"></i>
+          <span>查看解析</span>
+        </button>
+        <button id="retryBtn" class="primary-button" type="button">
+          <i data-lucide="rotate-cw"></i>
+          <span>再来一次</span>
+        </button>
+      </div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
