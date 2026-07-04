@@ -21,6 +21,7 @@ function collectElements() {
     modeButtons: [...document.querySelectorAll(".mode-button")],
     settingsGrid: document.querySelector(".settings-grid"),
     quantitySettingsGroup: document.querySelector("#quantitySettingsGroup"),
+    behaviorSettingsGroup: document.querySelector(".settings-group.is-behavior"),
     configFields: [...document.querySelectorAll("[data-config-for]")],
     configSummary: document.querySelector("#configSummary"),
     autoNextSetting: document.querySelector("#autoNextSetting"),

@@ -81,13 +81,31 @@
 
   .settings-grid {
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "filters"
+      "quantity"
+      "shortcuts"
+      "behavior";
   }
 
-  .settings-group.is-actions .field-stack {
+  .settings-grid.is-sequence {
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "filters"
+      "shortcuts"
+      "behavior";
   }
 
-  .settings-grid.is-sequence .settings-group.is-filters .field-stack {
+  .settings-grid.is-exam {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "filters"
+      "quantity"
+      "shortcuts";
+  }
+
+  .settings-grid.is-sequence .settings-group.is-filters .field-stack,
+  .settings-grid.is-exam .settings-group.is-shortcuts .field-stack {
     grid-template-columns: 1fr;
   }
 }

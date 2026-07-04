@@ -12,7 +12,7 @@
 }
 
 .settings-dialog {
-  width: min(900px, calc(100% - 32px));
+  width: min(880px, calc(100% - 32px));
   max-height: min(760px, calc(100vh - 32px));
   overflow: auto;
 }
@@ -42,10 +42,43 @@
 }
 
 .settings-grid {
-  margin: 18px 0;
+  margin: 20px 0;
   display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+  grid-template-areas:
+    "filters quantity"
+    "shortcuts behavior";
+  gap: 14px;
+  align-items: start;
+}
+
+.settings-group.is-filters {
+  grid-area: filters;
+}
+
+.settings-group.is-quantity {
+  grid-area: quantity;
+}
+
+.settings-group.is-shortcuts {
+  grid-area: shortcuts;
+}
+
+.settings-group.is-behavior {
+  grid-area: behavior;
+}
+
+.settings-grid.is-sequence {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-areas:
+    "filters filters"
+    "shortcuts behavior";
+}
+
+.settings-grid.is-exam {
+  grid-template-areas:
+    "filters quantity"
+    "shortcuts shortcuts";
 }
 
 .settings-grid.is-sequence .settings-group.is-filters {
@@ -56,28 +89,35 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.settings-grid.is-exam .settings-group.is-shortcuts .field-stack {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .settings-group {
   min-width: 0;
-  padding: 16px;
+  padding: 15px;
   border: 1px solid var(--line-dark);
   border-radius: var(--radius);
   display: grid;
   align-content: start;
-  gap: 14px;
-  background: rgba(255, 255, 255, 0.44);
+  gap: 13px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.66), rgba(255, 255, 255, 0.42));
 }
 
-.settings-group.is-actions {
-  grid-column: 1 / -1;
+.settings-group .section-title {
+  min-height: 28px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid rgba(54, 75, 105, 0.09);
 }
 
-.settings-group.is-actions .field-stack {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: end;
+.settings-group.is-shortcuts .field-stack,
+.settings-group.is-behavior .field-stack {
+  gap: 10px;
 }
 
-.settings-group.is-actions .switch-setting {
-  min-height: 44px;
+.settings-group.is-behavior .switch-setting {
+  min-height: 46px;
 }
 
 .result-metrics {

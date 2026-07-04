@@ -161,6 +161,7 @@ function updateModeControls() {
   });
 
   els.settingsGrid.classList.toggle("is-sequence", state.mode === "sequence");
+  els.settingsGrid.classList.toggle("is-exam", state.mode === "exam");
   els.quantitySettingsGroup.classList.toggle("is-hidden", state.mode === "sequence");
   els.autoNextSetting.classList.toggle("is-hidden", state.mode === "exam");
   els.autoNextDelayField.classList.toggle("is-hidden", state.mode === "exam");
@@ -170,6 +171,7 @@ function updateModeControls() {
   els.focusLayoutToggle.checked = state.mode === "exam" || state.focusLayout;
   els.focusLayoutToggle.disabled = state.mode === "exam";
   els.focusLayoutSetting.classList.toggle("is-hidden", state.mode === "exam");
+  els.behaviorSettingsGroup.classList.toggle("is-hidden", state.mode === "exam");
   if (state.mode === "exam") {
     clearAutoNextTimer();
   }
