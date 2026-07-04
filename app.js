@@ -157,7 +157,6 @@ function collectElements() {
     questionCard: document.querySelector("#questionCard"),
     palette: document.querySelector("#palette"),
     progressText: document.querySelector("#progressText"),
-    submitExamBtn: document.querySelector("#submitExamBtn"),
     resultDialog: document.querySelector("#resultDialog"),
     closeResultBtn: document.querySelector("#closeResultBtn"),
     resultTitle: document.querySelector("#resultTitle"),
@@ -266,7 +265,6 @@ function bindEvents() {
   els.prevBtn.addEventListener("click", () => goRelative(-1));
   els.nextBtn.addEventListener("click", () => goRelative(1));
   els.exitSessionBtn.addEventListener("click", exitSession);
-  els.submitExamBtn.addEventListener("click", submitExam);
   els.closeResultBtn.addEventListener("click", closeResultDialog);
   els.retryBtn.addEventListener("click", () => {
     closeResultDialog();
@@ -1102,8 +1100,6 @@ function renderHeader() {
   els.prevBtn.disabled = !session || session.currentIndex === 0;
   els.nextBtn.disabled = !session || session.currentIndex >= total - 1;
   els.exitSessionBtn.hidden = !(session && session.mode !== "exam");
-  els.submitExamBtn.hidden = !(session && session.mode === "exam");
-  els.submitExamBtn.disabled = !session || session.submitted;
   renderExamTimer();
 }
 
