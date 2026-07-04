@@ -135,7 +135,7 @@ scripts/interactions.js     作答交互、评分、导航、结果/确认弹窗
 | `minutes` | 正整数 | 模拟考试时长，单位分钟 |
 | `random` | 空值或正整数 | 快捷设置为随机刷题；传数字时同时作为题数 |
 | `exam` | 空值或正整数 | 快捷设置为模拟考试；传数字时同时作为题数 |
-| `shuffleAnswers` | 空值 / `1` / `0` | 开启或关闭答案选项乱序；也兼容 `answerShuffle`、`shuffleOptions`、`answer_shuffle` |
+| `shuffleAnswers` | 空值 / `1` / `0` | 开启或关闭答案选项乱序 |
 | `start` | `1` / `0` | `1` 自动开始；不传或传 `0` 只应用设置 |
 
 ## 示例

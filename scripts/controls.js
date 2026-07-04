@@ -66,12 +66,7 @@ function applyUrlPreset() {
   const randomCount =
     getPositiveInteger(getParam(params, ["randomCount", "random_count"])) || getPositiveInteger(randomShortcut);
   const examMinutes = getPositiveInteger(getParam(params, ["minutes"]));
-  const answerShuffle = getBooleanParam(params, [
-    "shuffleAnswers",
-    "answerShuffle",
-    "shuffleOptions",
-    "answer_shuffle",
-  ]);
+  const answerShuffle = getBooleanParam(params, ["shuffleAnswers"]);
 
   if (count) {
     els.examCount.value = String(count);
