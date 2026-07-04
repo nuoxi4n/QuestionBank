@@ -124,12 +124,6 @@
   transform: translate(-50%, 0);
 }
 
-.palette-button.is-active {
-  color: #fff;
-  border-color: rgba(20, 121, 255, 0.35);
-  background: var(--blue);
-}
-
 @supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
   .glass-surface {
     background: rgba(255, 255, 255, 0.88);
