@@ -921,13 +921,15 @@ h3 {
 }
 
 .result-dialog,
-.settings-dialog {
+.settings-dialog,
+.confirm-dialog {
   border: 1px solid var(--line);
   padding: 22px;
   color: var(--ink);
 }
 
-.result-dialog {
+.result-dialog,
+.confirm-dialog {
   width: min(520px, calc(100% - 32px));
 }
 
@@ -938,7 +940,8 @@ h3 {
 }
 
 .result-dialog::backdrop,
-.settings-dialog::backdrop {
+.settings-dialog::backdrop,
+.confirm-dialog::backdrop {
   background: rgba(17, 32, 51, 0.28);
   backdrop-filter: blur(10px);
 }
@@ -952,6 +955,12 @@ h3 {
 .result-dialog h2,
 .settings-dialog h2 {
   margin-right: 48px;
+}
+
+.confirm-message {
+  margin: 12px 0 18px;
+  color: var(--muted);
+  line-height: 1.7;
 }
 
 .settings-grid {

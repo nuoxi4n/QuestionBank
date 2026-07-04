@@ -97,6 +97,7 @@ const state = {
 };
 
 let els = {};
+let confirmResolver = null;
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -165,6 +166,11 @@ function collectElements() {
     resultReview: document.querySelector("#resultReview"),
     reviewBtn: document.querySelector("#reviewBtn"),
     retryBtn: document.querySelector("#retryBtn"),
+    confirmDialog: document.querySelector("#confirmDialog"),
+    confirmTitle: document.querySelector("#confirmTitle"),
+    confirmMessage: document.querySelector("#confirmMessage"),
+    confirmCancelBtn: document.querySelector("#confirmCancelBtn"),
+    confirmOkBtn: document.querySelector("#confirmOkBtn"),
     toast: document.querySelector("#toast"),
   };
 }
@@ -273,6 +279,17 @@ function bindEvents() {
   els.reviewBtn.addEventListener("click", () => {
     closeResultDialog();
     jumpToReviewTarget();
+  });
+  els.confirmCancelBtn.addEventListener("click", () => closeConfirmDialog(false));
+  els.confirmOkBtn.addEventListener("click", () => closeConfirmDialog(true));
+  els.confirmDialog.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeConfirmDialog(false);
+  });
+  els.confirmDialog.addEventListener("click", (event) => {
+    if (event.target === els.confirmDialog) {
+      closeConfirmDialog(false);
+    }
   });
 
   els.palette.addEventListener("click", (event) => {
@@ -1005,7 +1022,7 @@ function startSession(silent = false) {
   }
 }
 
-function exitSession() {
+async function exitSession() {
   const session = state.session;
   if (!session) return;
 
@@ -1015,7 +1032,14 @@ function exitSession() {
       ? "退出后本次考试不会交卷，作答记录会清空，确认退出？"
       : "退出后本次作答记录会清空，确认退出？";
 
-  if (hasProgress && !window.confirm(message)) {
+  if (
+    hasProgress &&
+    !(await requestConfirm({
+      title: "退出本次会话？",
+      message,
+      confirmLabel: "退出",
+    }))
+  ) {
     return;
   }
 
@@ -1492,7 +1516,7 @@ function handleQuestionInput(event) {
 
 function handleGlobalShortcut(event) {
   if (event.repeat || event.isComposing || shouldIgnoreShortcutTarget(event.target)) return;
-  if (!state.session || els.resultDialog.open || els.settingsDialog.open) return;
+  if (!state.session || els.resultDialog.open || els.settingsDialog.open || els.confirmDialog.open) return;
   if (event.ctrlKey || event.metaKey || event.altKey) return;
 
   const navigationOffset = getShortcutNavigationOffset(event);
@@ -1662,13 +1686,21 @@ function revealCurrent() {
   renderAll();
 }
 
-function submitExam(options = {}) {
+async function submitExam(options = {}) {
   const session = state.session;
   if (!session || session.mode !== "exam" || session.submitted) return;
 
   const force = options?.force === true;
   const unanswered = session.questions.filter((question) => !hasAnswer(question, session.answers[question.id])).length;
-  if (!force && unanswered > 0 && !window.confirm(`还有 ${unanswered} 题未作答，确认交卷？`)) {
+  if (
+    !force &&
+    unanswered > 0 &&
+    !(await requestConfirm({
+      title: "确认交卷？",
+      message: `还有 ${unanswered} 题未作答，交卷后将按当前答案评分。`,
+      confirmLabel: "交卷",
+    }))
+  ) {
     return;
   }
 
@@ -1819,6 +1851,38 @@ function closeResultDialog() {
     els.resultDialog.close();
   } else {
     els.resultDialog.removeAttribute("open");
+  }
+}
+
+function requestConfirm({ title, message, confirmLabel = "确认" }) {
+  closeConfirmDialog(false);
+  els.confirmTitle.textContent = title;
+  els.confirmMessage.textContent = message;
+  els.confirmOkBtn.querySelector("span").textContent = confirmLabel;
+
+  if (!els.confirmDialog.open && typeof els.confirmDialog.showModal === "function") {
+    els.confirmDialog.showModal();
+  } else {
+    els.confirmDialog.setAttribute("open", "");
+  }
+
+  refreshIcons();
+
+  return new Promise((resolve) => {
+    confirmResolver = resolve;
+  });
+}
+
+function closeConfirmDialog(confirmed) {
+  if (els.confirmDialog.open && typeof els.confirmDialog.close === "function") {
+    els.confirmDialog.close();
+  } else {
+    els.confirmDialog.removeAttribute("open");
+  }
+
+  if (confirmResolver) {
+    confirmResolver(Boolean(confirmed));
+    confirmResolver = null;
   }
 }
 

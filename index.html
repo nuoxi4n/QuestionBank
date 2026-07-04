@@ -293,6 +293,22 @@
       </div>
     </dialog>
 
+    <dialog id="confirmDialog" class="confirm-dialog glass-surface">
+      <p class="eyebrow">确认操作</p>
+      <h2 id="confirmTitle">确认继续？</h2>
+      <p id="confirmMessage" class="confirm-message"></p>
+      <div class="dialog-actions">
+        <button id="confirmCancelBtn" class="secondary-button" type="button">
+          <i data-lucide="x"></i>
+          <span>取消</span>
+        </button>
+        <button id="confirmOkBtn" class="primary-button" type="button">
+          <i data-lucide="check"></i>
+          <span>确认</span>
+        </button>
+      </div>
+    </dialog>
+
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </body>
 </html>
