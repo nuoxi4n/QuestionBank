@@ -89,6 +89,7 @@ const state = {
   autoNextDelayMs: 3000,
   autoNextTimer: 0,
   examTimerInterval: 0,
+  focusLayout: false,
   optionShortcutMode: "number",
   submitShortcutMode: "enter-space",
   navigationShortcutMode: "arrows",
@@ -113,6 +114,9 @@ function collectElements() {
     bankSelect: document.querySelector("#bankSelect"),
     reloadBankBtn: document.querySelector("#reloadBankBtn"),
     startBtn: document.querySelector("#startBtn"),
+    workspace: document.querySelector(".workspace"),
+    settingsPanel: document.querySelector(".settings-panel"),
+    topSettingsBtn: document.querySelector("#topSettingsBtn"),
     openSettingsBtn: document.querySelector("#openSettingsBtn"),
     settingsDialog: document.querySelector("#settingsDialog"),
     closeSettingsBtn: document.querySelector("#closeSettingsBtn"),
@@ -126,6 +130,8 @@ function collectElements() {
     autoNextToggle: document.querySelector("#autoNextToggle"),
     autoNextDelayField: document.querySelector("#autoNextDelayField"),
     autoNextDelayMs: document.querySelector("#autoNextDelayMs"),
+    focusLayoutSetting: document.querySelector("#focusLayoutSetting"),
+    focusLayoutToggle: document.querySelector("#focusLayoutToggle"),
     optionShortcutSelect: document.querySelector("#optionShortcutSelect"),
     submitShortcutSelect: document.querySelector("#submitShortcutSelect"),
     navigationShortcutSelect: document.querySelector("#navigationShortcutSelect"),
@@ -197,6 +203,7 @@ function bindEvents() {
   });
 
   els.startBtn.addEventListener("click", () => startSession());
+  els.topSettingsBtn.addEventListener("click", openSettingsDialog);
   els.openSettingsBtn.addEventListener("click", openSettingsDialog);
   els.closeSettingsBtn.addEventListener("click", closeSettingsDialog);
   els.applySettingsBtn.addEventListener("click", closeSettingsDialog);
@@ -241,6 +248,17 @@ function bindEvents() {
     writeStoredString("questionbank.navigationShortcutMode", state.navigationShortcutMode);
     showToast("已更新切题快捷键");
   });
+  els.focusLayoutToggle.addEventListener("change", () => {
+    if (state.mode === "exam") {
+      els.focusLayoutToggle.checked = true;
+      return;
+    }
+
+    state.focusLayout = els.focusLayoutToggle.checked;
+    writeStoredBoolean("questionbank.focusLayout", state.focusLayout);
+    renderAll();
+    showToast(state.focusLayout ? "已开启专注布局" : "已关闭专注布局");
+  });
   els.bankSelect.addEventListener("change", () => loadSelectedBank(els.bankSelect.value));
   els.reloadBankBtn.addEventListener("click", () => reloadSelectedBank());
   els.bankFile.addEventListener("change", handleBankFile);
@@ -271,6 +289,7 @@ function bindEvents() {
 function loadSettings() {
   state.autoNext = readStoredBoolean("questionbank.autoNext", false);
   state.autoNextDelayMs = readStoredClampedNumber("questionbank.autoNextDelayMs", 3000, 0, 10000);
+  state.focusLayout = readStoredBoolean("questionbank.focusLayout", false);
   state.optionShortcutMode = readStoredChoice("questionbank.optionShortcutMode", "number", [
     "number",
     "letter",
@@ -286,6 +305,7 @@ function loadSettings() {
   state.navigationShortcutMode = readStoredChoice("questionbank.navigationShortcutMode", "arrows", ["arrows", "off"]);
   els.autoNextToggle.checked = state.autoNext;
   els.autoNextDelayMs.value = String(state.autoNextDelayMs);
+  els.focusLayoutToggle.checked = state.focusLayout;
   els.optionShortcutSelect.value = state.optionShortcutMode;
   els.submitShortcutSelect.value = state.submitShortcutMode;
   els.navigationShortcutSelect.value = state.navigationShortcutMode;
@@ -912,6 +932,9 @@ function updateModeControls() {
   els.quantitySettingsGroup.classList.toggle("is-hidden", state.mode === "sequence");
   els.autoNextSetting.classList.toggle("is-hidden", state.mode === "exam");
   els.autoNextDelayField.classList.toggle("is-hidden", state.mode === "exam");
+  els.focusLayoutToggle.checked = state.mode === "exam" || state.focusLayout;
+  els.focusLayoutToggle.disabled = state.mode === "exam";
+  els.focusLayoutSetting.classList.toggle("is-forced", state.mode === "exam");
   if (state.mode === "exam") {
     clearAutoNextTimer();
   }
@@ -1025,11 +1048,28 @@ function sampleQuestions(pool, count) {
 }
 
 function renderAll() {
+  renderWorkspaceState();
   renderHeader();
   renderQuestion();
   renderPalette();
   renderStats();
   refreshIcons();
+}
+
+function renderWorkspaceState() {
+  const session = state.session;
+  const forceFocus = Boolean(session && session.mode === "exam");
+  const optionalFocus = Boolean(session && session.mode !== "exam" && state.focusLayout);
+  const focusLayoutActive = Boolean((forceFocus || optionalFocus) && !isSessionComplete(session));
+  els.workspace.classList.toggle("is-focus-layout", focusLayoutActive);
+  els.settingsPanel.toggleAttribute("inert", focusLayoutActive);
+  els.settingsPanel.setAttribute("aria-hidden", String(focusLayoutActive));
+}
+
+function isSessionComplete(session) {
+  if (!session) return false;
+  if (session.mode === "exam") return Boolean(session.submitted);
+  return session.questions.every((question) => session.answers[question.id]?.checked);
 }
 
 function renderHeader() {

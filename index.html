@@ -28,6 +28,10 @@
             <i data-lucide="database"></i>
             <select id="bankSelect" aria-label="选择题库"></select>
           </label>
+          <button id="topSettingsBtn" class="icon-button" type="button" title="设置">
+            <i data-lucide="settings-2"></i>
+            <span>设置</span>
+          </button>
           <label class="icon-button file-trigger" title="导入 JSON 题库">
             <i data-lucide="upload"></i>
             <span>导入</span>
@@ -230,6 +234,11 @@
                 <option value="arrows">方向键 ← / →</option>
                 <option value="off">关闭</option>
               </select>
+            </label>
+            <label class="switch-setting" id="focusLayoutSetting">
+              <span>开始后隐藏刷题设置</span>
+              <input id="focusLayoutToggle" type="checkbox" />
+              <span class="switch-track" aria-hidden="true"></span>
             </label>
             <label class="switch-setting" id="autoNextSetting">
               <span>提交后自动下一题</span>
