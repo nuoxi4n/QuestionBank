@@ -1,0 +1,137 @@
+.result-dialog,
+.settings-dialog,
+.confirm-dialog {
+  border: 1px solid var(--line);
+  padding: 22px;
+  color: var(--ink);
+}
+
+.result-dialog,
+.confirm-dialog {
+  width: min(520px, calc(100% - 32px));
+}
+
+.settings-dialog {
+  width: min(900px, calc(100% - 32px));
+  max-height: min(760px, calc(100vh - 32px));
+  overflow: auto;
+}
+
+.result-dialog::backdrop,
+.settings-dialog::backdrop,
+.confirm-dialog::backdrop {
+  background: rgba(17, 32, 51, 0.28);
+  backdrop-filter: blur(10px);
+}
+
+.dialog-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.result-dialog h2,
+.settings-dialog h2 {
+  margin-right: 48px;
+}
+
+.confirm-message {
+  margin: 12px 0 18px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.settings-grid {
+  margin: 18px 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.settings-grid.is-sequence .settings-group.is-filters {
+  grid-column: 1 / -1;
+}
+
+.settings-grid.is-sequence .settings-group.is-filters .field-stack {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.settings-group {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line-dark);
+  border-radius: var(--radius);
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.44);
+}
+
+.settings-group.is-actions {
+  grid-column: 1 / -1;
+}
+
+.settings-group.is-actions .field-stack {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+}
+
+.settings-group.is-actions .switch-setting {
+  min-height: 44px;
+}
+
+.result-metrics {
+  margin: 18px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.result-metrics div {
+  min-height: 86px;
+  padding: 12px;
+  display: grid;
+  align-content: space-between;
+}
+
+.dialog-actions {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 20;
+  max-width: min(520px, calc(100% - 32px));
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 18px 50px rgba(17, 32, 51, 0.18);
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.palette-button.is-active {
+  color: #fff;
+  border-color: rgba(20, 121, 255, 0.35);
+  background: var(--blue);
+}
+
+@supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
+  .glass-surface {
+    background: rgba(255, 255, 255, 0.88);
+  }
+}

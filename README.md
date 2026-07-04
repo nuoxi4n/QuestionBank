@@ -16,6 +16,24 @@ python -m http.server 5500
 http://127.0.0.1:5500/
 ```
 
+## 文件结构
+
+```text
+index.html                  页面结构
+styles.css                  样式入口，导入 styles/ 下的分文件
+styles/base.css             基础变量、顶部栏、按钮
+styles/layout.css           主布局、设置面板、通用表单
+styles/quiz.css             题目、选项、反馈、答题卡
+styles/dialogs.css          弹窗、Toast
+styles/responsive.css       响应式规则
+scripts/config.js           常量、内置题库、全局状态
+scripts/core.js             启动入口、初始化、事件绑定、本地设置、设置弹窗
+scripts/banks.js            多题库读取、导入、题库归一化
+scripts/controls.js         筛选、URL 参数、模式控件
+scripts/session.js          开始/退出会话、渲染、统计
+scripts/interactions.js     作答交互、评分、导航、结果/确认弹窗
+```
+
 ## 题库格式
 
 默认先读取 `question-banks.json` 作为题库清单，再按当前选择读取对应题库。清单格式：
