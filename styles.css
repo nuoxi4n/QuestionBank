@@ -485,7 +485,7 @@ h3 {
 }
 
 .mini-stats div,
-.result-strip,
+.result-strip div,
 .result-metrics div {
   border: 1px solid var(--line-dark);
   border-radius: var(--radius);
@@ -905,14 +905,16 @@ h3 {
 
 .result-strip {
   margin-top: auto;
-  padding: 12px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
 
-.result-strip .secondary-button {
-  width: 100%;
+.result-strip div {
+  min-height: 64px;
+  padding: 12px;
+  display: grid;
+  align-content: space-between;
 }
 
 .result-dialog,

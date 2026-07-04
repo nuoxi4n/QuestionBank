@@ -158,6 +158,10 @@ function collectElements() {
     questionCard: document.querySelector("#questionCard"),
     palette: document.querySelector("#palette"),
     progressText: document.querySelector("#progressText"),
+    paletteAnswered: document.querySelector("#paletteAnswered"),
+    paletteRemaining: document.querySelector("#paletteRemaining"),
+    paletteAccuracyLabel: document.querySelector("#paletteAccuracyLabel"),
+    paletteAccuracy: document.querySelector("#paletteAccuracy"),
     resultDialog: document.querySelector("#resultDialog"),
     closeResultBtn: document.querySelector("#closeResultBtn"),
     resultTitle: document.querySelector("#resultTitle"),
@@ -1193,10 +1197,17 @@ function formatDuration(ms) {
 
 function renderStats() {
   const stats = computeStats();
+  const session = state.session;
+  const total = session?.questions.length || 0;
+  const examPending = Boolean(session && session.mode === "exam" && !session.submitted);
   els.bankSize.textContent = String(state.bank.length);
   els.answeredCount.textContent = String(stats.answered);
   els.correctCount.textContent = String(stats.correct);
   els.accuracyRate.textContent = `${stats.accuracy}%`;
+  els.paletteAnswered.textContent = String(stats.answered);
+  els.paletteRemaining.textContent = String(Math.max(total - stats.answered, 0));
+  els.paletteAccuracyLabel.textContent = examPending ? "评分" : "正确率";
+  els.paletteAccuracy.textContent = examPending ? "交卷后" : `${stats.accuracy}%`;
   els.bankSource.textContent = `${state.source || "未载入"} · ${getFilteredBank().length} 题可用`;
   updateConfigSummary();
 }
