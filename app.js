@@ -1007,17 +1007,23 @@ function startSession(silent = false) {
 
 function exitSession() {
   const session = state.session;
-  if (!session || session.mode === "exam") return;
+  if (!session) return;
 
   const hasProgress = session.questions.some((question) => hasAnswer(question, session.answers[question.id]));
-  if (hasProgress && !window.confirm("退出后本次作答记录会清空，确认退出？")) {
+  const message =
+    session.mode === "exam"
+      ? "退出后本次考试不会交卷，作答记录会清空，确认退出？"
+      : "退出后本次作答记录会清空，确认退出？";
+
+  if (hasProgress && !window.confirm(message)) {
     return;
   }
 
   clearAutoNextTimer();
+  clearExamTimer();
   state.session = null;
   renderAll();
-  showToast("已退出本次练习");
+  showToast(session.mode === "exam" ? "已退出本次考试" : "已退出本次练习");
 }
 
 function getFilteredBank() {
@@ -1099,7 +1105,7 @@ function renderHeader() {
   els.progressText.textContent = `${current} / ${total}`;
   els.prevBtn.disabled = !session || session.currentIndex === 0;
   els.nextBtn.disabled = !session || session.currentIndex >= total - 1;
-  els.exitSessionBtn.hidden = !(session && session.mode !== "exam");
+  els.exitSessionBtn.hidden = !session || Boolean(session.submitted);
   renderExamTimer();
 }
 
