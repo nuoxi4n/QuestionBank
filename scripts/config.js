@@ -104,7 +104,7 @@ const DEFAULT_BANK_SOURCES = [
   {
     id: "default",
     title: "前端综合题库",
-    url: "./question-bank.json",
+    url: "./data/question-bank.json",
   },
 ];
 

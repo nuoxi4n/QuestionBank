@@ -16,7 +16,7 @@ async function loadBankCatalog() {
 
 async function loadBankSources() {
   try {
-    const response = await fetch("./question-banks.json", { cache: "no-store" });
+    const response = await fetch("./data/question-banks.json", { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }

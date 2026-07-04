@@ -4,7 +4,7 @@
 
 ## 运行
 
-建议用本地静态服务打开，避免浏览器拦截 `fetch("./question-banks.json")` 和题库 JSON：
+建议用本地静态服务打开，避免浏览器拦截 `fetch("./data/question-banks.json")` 和题库 JSON：
 
 ```bash
 python -m http.server 5500
@@ -20,7 +20,10 @@ http://127.0.0.1:5500/
 
 ```text
 index.html                  页面结构
-styles.css                  样式入口，导入 styles/ 下的分文件
+styles/main.css             样式入口，导入 styles/ 下的分文件
+data/question-banks.json    题库清单
+data/question-bank.json     默认题库
+data/question-bank-web-basics.json 示例题库
 styles/base.css             基础变量、顶部栏、按钮
 styles/layout.css           主布局、设置面板、通用表单
 styles/quiz.css             题目、选项、反馈、答题卡
@@ -36,7 +39,7 @@ scripts/interactions.js     作答交互、评分、导航、结果/确认弹窗
 
 ## 题库格式
 
-默认先读取 `question-banks.json` 作为题库清单，再按当前选择读取对应题库。清单格式：
+默认先读取 `data/question-banks.json` 作为题库清单，再按当前选择读取对应题库。清单格式：
 
 ```json
 {
@@ -44,13 +47,13 @@ scripts/interactions.js     作答交互、评分、导航、结果/确认弹窗
     {
       "id": "frontend",
       "title": "前端综合题库",
-      "url": "./question-bank.json"
+      "url": "./data/question-bank.json"
     }
   ]
 }
 ```
 
-如果清单读取失败，会退回读取 `question-bank.json`。单个题库文件的根节点可以是题目数组，也可以是：
+如果清单读取失败，会退回读取 `data/question-bank.json`。单个题库文件的根节点可以是题目数组，也可以是：
 
 ```json
 {
@@ -112,7 +115,7 @@ scripts/interactions.js     作答交互、评分、导航、结果/确认弹窗
 | 参数 | 可选值 | 说明 |
 | --- | --- | --- |
 | `mode` | `sequence` / `random` / `exam` | 刷题模式：顺序、随机、模拟考试 |
-| `bank` | `question-banks.json` 中的题库 `id` | 默认选中的题库 |
+| `bank` | `data/question-banks.json` 中的题库 `id` | 默认选中的题库 |
 | `qtype` | `single` / `multiple` / `truefalse` / `qa` | 题型筛选：单选、多选、判断、问答 |
 | `category` | 题库中的分类名 | 分类筛选 |
 | `level` | `easy` / `medium` / `hard` | 难度筛选 |
