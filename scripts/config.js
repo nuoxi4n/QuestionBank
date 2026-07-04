@@ -169,6 +169,7 @@ const state = {
   source: "",
   urlPresetApplied: false,
   autoNext: false,
+  answerShuffle: false,
   autoNextDelayMs: 3000,
   autoNextTimer: 0,
   examTimerInterval: 0,

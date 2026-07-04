@@ -1,6 +1,6 @@
 # QuestionBank Glass
 
-纯前端刷题页面，支持顺序刷题、随机刷题、模拟考试和多题库切换，题库来自 JSON 文件。
+纯前端刷题页面，支持顺序刷题、随机刷题、模拟考试、答案选项乱序和多题库切换，题库来自 JSON 文件。
 
 ## 运行
 
@@ -36,6 +36,10 @@ scripts/controls.js         筛选、URL 参数、模式控件
 scripts/session.js          开始/退出会话、渲染、统计
 scripts/interactions.js     作答交互、评分、导航、结果/确认弹窗
 ```
+
+## 答案选项乱序
+
+在“刷题设置”的“操作”区域开启“答案选项乱序”后，每次开始刷题都会重新打乱单选/多选题的选项位置，并同步重映射正确答案。例如原题 A 为 1、B 为 2、C 为 3，启用后本次会话可能显示为 A 为 2、B 为 1、C 为 3，判题仍按重排后的正确位置计算。
 
 ## 题库格式
 
@@ -125,6 +129,7 @@ scripts/interactions.js     作答交互、评分、导航、结果/确认弹窗
 | `minutes` | 正整数 | 模拟考试时长，单位分钟 |
 | `random` | 空值或正整数 | 快捷设置为随机刷题；传数字时同时作为题数 |
 | `exam` | 空值或正整数 | 快捷设置为模拟考试；传数字时同时作为题数 |
+| `shuffleAnswers` | 空值 / `1` / `0` | 开启或关闭答案选项乱序；也兼容 `answerShuffle`、`shuffleOptions`、`answer_shuffle` |
 | `start` | `1` / `0` | `1` 自动开始；不传或传 `0` 只应用设置 |
 
 ## 示例
@@ -145,6 +150,12 @@ http://127.0.0.1:5500/?mode=exam&qtype=single&count=10&start=1
 
 ```text
 http://127.0.0.1:5500/?mode=random&qtype=multiple&count=10&start=1
+```
+
+开启答案选项乱序并自动开始：
+
+```text
+http://127.0.0.1:5500/?mode=random&count=10&shuffleAnswers=1&start=1
 ```
 
 只应用 CSS 中等难度问答题筛选，不立即开始：

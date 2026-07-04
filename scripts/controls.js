@@ -66,6 +66,12 @@ function applyUrlPreset() {
   const randomCount =
     getPositiveInteger(getParam(params, ["randomCount", "random_count"])) || getPositiveInteger(randomShortcut);
   const examMinutes = getPositiveInteger(getParam(params, ["minutes"]));
+  const answerShuffle = getBooleanParam(params, [
+    "shuffleAnswers",
+    "answerShuffle",
+    "shuffleOptions",
+    "answer_shuffle",
+  ]);
 
   if (count) {
     els.examCount.value = String(count);
@@ -80,6 +86,10 @@ function applyUrlPreset() {
   if (examMinutes) {
     els.examMinutes.value = String(examMinutes);
     persistExamMinutes();
+  }
+  if (answerShuffle !== null) {
+    state.answerShuffle = answerShuffle;
+    els.answerShuffleToggle.checked = answerShuffle;
   }
 
   updateModeControls();
@@ -121,6 +131,23 @@ function setSelectFromParam(select, value) {
 function getPositiveInteger(value) {
   const number = Number.parseInt(value, 10);
   return Number.isFinite(number) && number > 0 ? number : 0;
+}
+
+function getBooleanParam(params, names) {
+  for (const name of names) {
+    if (params.has(name)) {
+      return parseBooleanParam(params.get(name));
+    }
+  }
+  return null;
+}
+
+function parseBooleanParam(value) {
+  const key = String(value ?? "").trim().toLowerCase();
+  if (!key) return true;
+  if (["1", "true", "yes", "on", "是"].includes(key)) return true;
+  if (["0", "false", "no", "off", "否"].includes(key)) return false;
+  return null;
 }
 
 function isTrueParam(value) {

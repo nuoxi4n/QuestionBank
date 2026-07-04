@@ -26,6 +26,7 @@ function collectElements() {
     configSummary: document.querySelector("#configSummary"),
     autoNextSetting: document.querySelector("#autoNextSetting"),
     autoNextToggle: document.querySelector("#autoNextToggle"),
+    answerShuffleToggle: document.querySelector("#answerShuffleToggle"),
     autoNextDelayField: document.querySelector("#autoNextDelayField"),
     autoNextDelayMs: document.querySelector("#autoNextDelayMs"),
     focusLayoutSetting: document.querySelector("#focusLayoutSetting"),
@@ -135,6 +136,13 @@ function bindEvents() {
     }
     showToast(state.autoNext ? "已开启自动下一题" : "已关闭自动下一题");
   });
+  els.answerShuffleToggle.addEventListener("change", () => {
+    state.answerShuffle = els.answerShuffleToggle.checked;
+    writeStoredBoolean("questionbank.answerShuffle", state.answerShuffle);
+    updateConfigSummary();
+    const suffix = state.session ? "，下次开始生效" : "";
+    showToast(`${state.answerShuffle ? "已开启" : "已关闭"}答案选项乱序${suffix}`);
+  });
   els.autoNextDelayMs.addEventListener("change", () => {
     state.autoNextDelayMs = getAutoNextDelayMs();
     writeStoredString("questionbank.autoNextDelayMs", String(state.autoNextDelayMs));
@@ -206,6 +214,7 @@ function bindEvents() {
 
 function loadSettings() {
   state.autoNext = readStoredBoolean("questionbank.autoNext", false);
+  state.answerShuffle = readStoredBoolean("questionbank.answerShuffle", false);
   state.autoNextDelayMs = readStoredClampedNumber("questionbank.autoNextDelayMs", 3000, 0, 10000);
   state.focusLayout = readStoredBoolean("questionbank.focusLayout", true);
   state.optionShortcutMode = readStoredChoice("questionbank.optionShortcutMode", "number", [
@@ -222,6 +231,7 @@ function loadSettings() {
   ]);
   state.navigationShortcutMode = readStoredChoice("questionbank.navigationShortcutMode", "arrows", ["arrows", "off"]);
   els.autoNextToggle.checked = state.autoNext;
+  els.answerShuffleToggle.checked = state.answerShuffle;
   els.autoNextDelayMs.value = String(state.autoNextDelayMs);
   els.focusLayoutToggle.checked = state.focusLayout;
   els.optionShortcutSelect.value = state.optionShortcutMode;

@@ -25,6 +25,8 @@ function startSession(silent = false) {
     questions = sampleQuestions(pool, count);
   }
 
+  questions = prepareSessionQuestions(questions);
+
   const startedAt = Date.now();
   const examMinutes = state.mode === "exam" ? getExamMinutes() : 0;
 
@@ -118,6 +120,51 @@ function sampleQuestions(pool, count) {
     [copy[index], copy[randomIndex]] = [copy[randomIndex], copy[index]];
   }
   return copy.slice(0, count);
+}
+
+function prepareSessionQuestions(questions) {
+  if (!state.answerShuffle) return questions;
+  return questions.map(shuffleQuestionOptions);
+}
+
+function shuffleQuestionOptions(question) {
+  if (!["single", "multiple"].includes(question.type) || question.options.length < 2) {
+    return question;
+  }
+
+  const shuffled = shuffleOptionsEnsuringMovement(question.options);
+  const originalToCurrentKey = new Map();
+  const options = shuffled.map((option, index) => {
+    const key = letterAt(index);
+    originalToCurrentKey.set(normalizeChoiceKey(option.key), key);
+    return {
+      ...option,
+      key,
+    };
+  });
+  const answer = (question.answer || [])
+    .map((key) => originalToCurrentKey.get(normalizeChoiceKey(key)))
+    .filter(Boolean);
+
+  return {
+    ...question,
+    options,
+    answer,
+  };
+}
+
+function shuffleOptionsEnsuringMovement(options) {
+  const shuffled = [...options];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+  }
+
+  const unchanged = shuffled.every((option, index) => normalizeChoiceKey(option.key) === normalizeChoiceKey(options[index].key));
+  if (!unchanged) return shuffled;
+
+  const offset = Math.floor(Math.random() * (options.length - 1)) + 1;
+  return options.slice(offset).concat(options.slice(0, offset));
 }
 
 function renderAll() {
@@ -240,6 +287,10 @@ function updateConfigSummary() {
     els.categorySelect.value || "全部分类",
     displayDifficulty(els.difficultySelect.value) || "全部难度",
   ];
+
+  if (state.answerShuffle) {
+    chips.push("答案选项乱序");
+  }
 
   if (state.mode === "random") {
     chips.push(`随机 ${getRequestedCount(els.randomCount, Math.max(poolSize, 1))} 题`);
