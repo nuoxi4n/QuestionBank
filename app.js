@@ -89,7 +89,7 @@ const state = {
   autoNextDelayMs: 3000,
   autoNextTimer: 0,
   examTimerInterval: 0,
-  focusLayout: false,
+  focusLayout: true,
   optionShortcutMode: "number",
   submitShortcutMode: "enter-space",
   navigationShortcutMode: "arrows",
@@ -306,7 +306,7 @@ function bindEvents() {
 function loadSettings() {
   state.autoNext = readStoredBoolean("questionbank.autoNext", false);
   state.autoNextDelayMs = readStoredClampedNumber("questionbank.autoNextDelayMs", 3000, 0, 10000);
-  state.focusLayout = readStoredBoolean("questionbank.focusLayout", false);
+  state.focusLayout = readStoredBoolean("questionbank.focusLayout", true);
   state.optionShortcutMode = readStoredChoice("questionbank.optionShortcutMode", "number", [
     "number",
     "letter",
@@ -799,7 +799,7 @@ function displayQuestionType(value) {
 
 function applyUrlPreset() {
   const params = new URLSearchParams(window.location.search);
-  if (!params.size) return true;
+  if (!params.size) return false;
 
   const typeParam = getParam(params, ["type"]);
   const explicitMode = parseModeParam(getParam(params, ["mode", "m"]));
@@ -845,7 +845,7 @@ function applyUrlPreset() {
   }
 
   updateModeControls();
-  return !isFalseParam(getParam(params, ["start"]));
+  return isTrueParam(getParam(params, ["start"]));
 }
 
 function getParam(params, names) {
@@ -933,6 +933,11 @@ function getPositiveInteger(value) {
 function isFalseParam(value) {
   const key = String(value || "").trim().toLowerCase();
   return ["0", "false", "no", "off", "否", "不"].includes(key);
+}
+
+function isTrueParam(value) {
+  const key = String(value || "").trim().toLowerCase();
+  return ["1", "true", "yes", "on", "是"].includes(key);
 }
 
 function updateModeControls() {
