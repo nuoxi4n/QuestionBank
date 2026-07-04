@@ -79,6 +79,7 @@ const state = {
   examTimerInterval: 0,
   optionShortcutMode: "number",
   submitShortcutMode: "enter-space",
+  navigationShortcutMode: "arrows",
   toastTimer: 0,
 };
 
@@ -110,6 +111,7 @@ function collectElements() {
     autoNextToggle: document.querySelector("#autoNextToggle"),
     optionShortcutSelect: document.querySelector("#optionShortcutSelect"),
     submitShortcutSelect: document.querySelector("#submitShortcutSelect"),
+    navigationShortcutSelect: document.querySelector("#navigationShortcutSelect"),
     questionTypeSelect: document.querySelector("#questionTypeSelect"),
     categorySelect: document.querySelector("#categorySelect"),
     difficultySelect: document.querySelector("#difficultySelect"),
@@ -210,6 +212,11 @@ function bindEvents() {
     writeStoredString("questionbank.submitShortcutMode", state.submitShortcutMode);
     showToast("已更新提交快捷键");
   });
+  els.navigationShortcutSelect.addEventListener("change", () => {
+    state.navigationShortcutMode = els.navigationShortcutSelect.value;
+    writeStoredString("questionbank.navigationShortcutMode", state.navigationShortcutMode);
+    showToast("已更新切题快捷键");
+  });
   els.reloadBankBtn.addEventListener("click", () => loadDefaultBank());
   els.bankFile.addEventListener("change", handleBankFile);
   els.prevBtn.addEventListener("click", () => goRelative(-1));
@@ -250,9 +257,11 @@ function loadSettings() {
     "space",
     "off",
   ]);
+  state.navigationShortcutMode = readStoredChoice("questionbank.navigationShortcutMode", "arrows", ["arrows", "off"]);
   els.autoNextToggle.checked = state.autoNext;
   els.optionShortcutSelect.value = state.optionShortcutMode;
   els.submitShortcutSelect.value = state.submitShortcutMode;
+  els.navigationShortcutSelect.value = state.navigationShortcutMode;
   els.examMinutes.value = String(readStoredNumber("questionbank.examMinutes", 45));
 }
 
@@ -1271,6 +1280,13 @@ function handleGlobalShortcut(event) {
   if (!state.session || els.resultDialog.open || els.settingsDialog.open) return;
   if (event.ctrlKey || event.metaKey || event.altKey) return;
 
+  const navigationOffset = getShortcutNavigationOffset(event);
+  if (navigationOffset) {
+    event.preventDefault();
+    goRelative(navigationOffset);
+    return;
+  }
+
   const optionIndex = getShortcutOptionIndex(event);
   if (optionIndex !== null) {
     event.preventDefault();
@@ -1290,6 +1306,13 @@ function shouldIgnoreShortcutTarget(target) {
 
   const button = target.closest?.("button");
   return Boolean(button && !button.closest("#questionCard"));
+}
+
+function getShortcutNavigationOffset(event) {
+  if (state.navigationShortcutMode === "off") return 0;
+  if (event.key === "ArrowLeft") return -1;
+  if (event.key === "ArrowRight") return 1;
+  return 0;
 }
 
 function getShortcutOptionIndex(event) {
