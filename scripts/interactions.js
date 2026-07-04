@@ -14,14 +14,29 @@ function handleQuestionClick(event) {
   const actionButton = event.target.closest("[data-action]");
   if (!actionButton) return;
 
-  const action = actionButton.dataset.action;
-  if (action === "submit-current") submitCurrent();
-  if (action === "reveal") revealCurrent();
-  if (action === "next") goRelative(1);
-  if (action === "prev") goRelative(-1);
-  if (action === "submit-exam") submitExam();
-  if (action === "show-result") showResultDialog();
-  if (action === "restart") startSession();
+  switch (actionButton.dataset.action) {
+    case "submit-current":
+      submitCurrent();
+      break;
+    case "reveal":
+      revealCurrent();
+      break;
+    case "next":
+      goRelative(1);
+      break;
+    case "prev":
+      goRelative(-1);
+      break;
+    case "submit-exam":
+      submitExam();
+      break;
+    case "show-result":
+      showResultDialog();
+      break;
+    case "restart":
+      startSession();
+      break;
+  }
 }
 
 function handleQuestionInput(event) {

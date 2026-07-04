@@ -211,32 +211,7 @@ function normalizeQuestion(item, index) {
 
 function normalizeType(type) {
   const key = String(type || "single").trim().toLowerCase();
-  const map = {
-    radio: "single",
-    single_choice: "single",
-    singlechoice: "single",
-    choice: "single",
-    单选: "single",
-    多选: "multiple",
-    checkbox: "multiple",
-    multiple_choice: "multiple",
-    multiplechoice: "multiple",
-    truefalse: "truefalse",
-    true_false: "truefalse",
-    truefalse_choice: "truefalse",
-    judge: "truefalse",
-    judgment: "truefalse",
-    boolean: "truefalse",
-    判断: "truefalse",
-    判断题: "truefalse",
-    qa: "qa",
-    question: "qa",
-    short: "qa",
-    essay: "qa",
-    问答: "qa",
-    简答: "qa",
-  };
-  return map[key] || (["single", "multiple", "truefalse", "qa"].includes(key) ? key : "single");
+  return QUESTION_TYPE_ALIASES[key] || "single";
 }
 
 function getTrueFalseOptions() {
@@ -306,32 +281,8 @@ function normalizeTrueFalseAnswer(answer) {
   }
 
   const key = String(answer ?? "").trim().toLowerCase();
-  const map = {
-    true: "A",
-    t: "A",
-    yes: "A",
-    y: "A",
-    correct: "A",
-    right: "A",
-    "1": "A",
-    对: "A",
-    是: "A",
-    正确: "A",
-    "√": "A",
-    false: "B",
-    f: "B",
-    no: "B",
-    n: "B",
-    incorrect: "B",
-    wrong: "B",
-    "0": "B",
-    错: "B",
-    否: "B",
-    错误: "B",
-    "×": "B",
-  };
   const choiceKey = normalizeChoiceKey(answer);
-  return map[key] || (["A", "B"].includes(choiceKey) ? choiceKey : "");
+  return TRUE_FALSE_ANSWER_ALIASES[key] || (["A", "B"].includes(choiceKey) ? choiceKey : "");
 }
 
 function normalizeChoiceKey(key) {
@@ -340,17 +291,7 @@ function normalizeChoiceKey(key) {
 
 function normalizeDifficulty(value) {
   const key = String(value || "medium").trim().toLowerCase();
-  const map = {
-    easy: "easy",
-    简单: "easy",
-    medium: "medium",
-    normal: "medium",
-    中等: "medium",
-    hard: "hard",
-    difficult: "hard",
-    困难: "hard",
-  };
-  return map[key] || key || "medium";
+  return DIFFICULTY_ALIASES[key] || key || "medium";
 }
 
 function letterAt(index) {

@@ -100,57 +100,12 @@ function getParam(params, names) {
 
 function parseModeParam(value) {
   const key = String(value || "").trim().toLowerCase();
-  const map = {
-    sequence: "sequence",
-    seq: "sequence",
-    order: "sequence",
-    ordered: "sequence",
-    list: "sequence",
-    顺序: "sequence",
-    random: "random",
-    rand: "random",
-    shuffle: "random",
-    随机: "random",
-    exam: "exam",
-    mock: "exam",
-    test: "exam",
-    考试: "exam",
-    模拟: "exam",
-    模拟考试: "exam",
-  };
-  return map[key] || "";
+  return MODE_ALIASES[key] || "";
 }
 
 function parseQuestionTypeParam(value) {
   const key = String(value || "").trim().toLowerCase();
-  const map = {
-    single: "single",
-    radio: "single",
-    single_choice: "single",
-    singlechoice: "single",
-    choice: "single",
-    单选: "single",
-    multiple: "multiple",
-    checkbox: "multiple",
-    multiple_choice: "multiple",
-    multiplechoice: "multiple",
-    多选: "multiple",
-    truefalse: "truefalse",
-    true_false: "truefalse",
-    truefalse_choice: "truefalse",
-    judge: "truefalse",
-    judgment: "truefalse",
-    boolean: "truefalse",
-    判断: "truefalse",
-    判断题: "truefalse",
-    qa: "qa",
-    question: "qa",
-    short: "qa",
-    essay: "qa",
-    问答: "qa",
-    简答: "qa",
-  };
-  return map[key] || "";
+  return QUESTION_TYPE_ALIASES[key] || "";
 }
 
 function parseDifficultyParam(value) {
@@ -169,11 +124,6 @@ function setSelectFromParam(select, value) {
 function getPositiveInteger(value) {
   const number = Number.parseInt(value, 10);
   return Number.isFinite(number) && number > 0 ? number : 0;
-}
-
-function isFalseParam(value) {
-  const key = String(value || "").trim().toLowerCase();
-  return ["0", "false", "no", "off", "否", "不"].includes(key);
 }
 
 function isTrueParam(value) {
