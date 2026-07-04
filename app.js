@@ -148,6 +148,7 @@ function collectElements() {
     bankSource: document.querySelector("#bankSource"),
     modeLabel: document.querySelector("#modeLabel"),
     sessionTitle: document.querySelector("#sessionTitle"),
+    exitSessionBtn: document.querySelector("#exitSessionBtn"),
     prevBtn: document.querySelector("#prevBtn"),
     nextBtn: document.querySelector("#nextBtn"),
     examTimer: document.querySelector("#examTimer"),
@@ -264,6 +265,7 @@ function bindEvents() {
   els.bankFile.addEventListener("change", handleBankFile);
   els.prevBtn.addEventListener("click", () => goRelative(-1));
   els.nextBtn.addEventListener("click", () => goRelative(1));
+  els.exitSessionBtn.addEventListener("click", exitSession);
   els.submitExamBtn.addEventListener("click", submitExam);
   els.closeResultBtn.addEventListener("click", closeResultDialog);
   els.retryBtn.addEventListener("click", () => {
@@ -1005,6 +1007,21 @@ function startSession(silent = false) {
   }
 }
 
+function exitSession() {
+  const session = state.session;
+  if (!session || session.mode === "exam") return;
+
+  const hasProgress = session.questions.some((question) => hasAnswer(question, session.answers[question.id]));
+  if (hasProgress && !window.confirm("退出后本次作答记录会清空，确认退出？")) {
+    return;
+  }
+
+  clearAutoNextTimer();
+  state.session = null;
+  renderAll();
+  showToast("已退出本次练习");
+}
+
 function getFilteredBank() {
   const questionType = els.questionTypeSelect.value;
   const category = els.categorySelect.value;
@@ -1084,6 +1101,7 @@ function renderHeader() {
   els.progressText.textContent = `${current} / ${total}`;
   els.prevBtn.disabled = !session || session.currentIndex === 0;
   els.nextBtn.disabled = !session || session.currentIndex >= total - 1;
+  els.exitSessionBtn.hidden = !(session && session.mode !== "exam");
   els.submitExamBtn.hidden = !(session && session.mode === "exam");
   els.submitExamBtn.disabled = !session || session.submitted;
   renderExamTimer();
