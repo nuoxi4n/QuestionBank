@@ -124,6 +124,15 @@
     },
     {
       "id": "FE009",
+      "type": "truefalse",
+      "category": "JavaScript",
+      "difficulty": "easy",
+      "stem": "const 声明的变量不能被重新赋值。",
+      "answer": true,
+      "explanation": "const 声明创建的是只读绑定，不能重新赋值。"
+    },
+    {
+      "id": "FE010",
       "type": "qa",
       "category": "浏览器",
       "difficulty": "medium",
@@ -133,7 +142,7 @@
       "explanation": "二者都遵循同源策略，常用于保存少量客户端状态。"
     },
     {
-      "id": "FE010",
+      "id": "FE011",
       "type": "qa",
       "category": "JavaScript",
       "difficulty": "hard",
@@ -143,7 +152,7 @@
       "explanation": "Promise 回调属于常见微任务，setTimeout 回调属于常见宏任务。"
     },
     {
-      "id": "FE011",
+      "id": "FE012",
       "type": "qa",
       "category": "CSS",
       "difficulty": "medium",
@@ -153,7 +162,7 @@
       "explanation": "可以通过 box-sizing: border-box 让 width 包含内容、padding 与 border。"
     },
     {
-      "id": "FE012",
+      "id": "FE013",
       "type": "multiple",
       "category": "可访问性",
       "difficulty": "medium",

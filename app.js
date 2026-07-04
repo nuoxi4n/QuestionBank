@@ -1,6 +1,7 @@
 const TYPE_LABELS = {
   single: "单选",
   multiple: "多选",
+  truefalse: "判断",
   qa: "问答",
 };
 
@@ -49,6 +50,15 @@ const FALLBACK_QUESTIONS = [
   },
   {
     id: "F003",
+    type: "truefalse",
+    category: "JavaScript",
+    difficulty: "easy",
+    stem: "const 声明的变量不能被重新赋值。",
+    answer: true,
+    explanation: "const 声明的绑定不可重新赋值，但对象或数组内部成员仍可能被修改。",
+  },
+  {
+    id: "F004",
     type: "qa",
     category: "浏览器",
     difficulty: "medium",
@@ -390,7 +400,8 @@ function normalizeQuestion(item, index) {
   if (!stem) return null;
 
   const id = String(item.id || item.no || `Q${String(index + 1).padStart(3, "0")}`);
-  const options = type === "qa" ? [] : normalizeOptions(item.options || item.choices || item["选项"] || []);
+  const rawOptions = normalizeOptions(item.options || item.choices || item["选项"] || []);
+  const options = type === "qa" ? [] : type === "truefalse" && !rawOptions.length ? getTrueFalseOptions() : rawOptions;
   const answer = item.answer ?? item.answers ?? item.correctAnswer ?? item["答案"] ?? item["正确答案"];
 
   return {
@@ -420,6 +431,14 @@ function normalizeType(type) {
     checkbox: "multiple",
     multiple_choice: "multiple",
     multiplechoice: "multiple",
+    truefalse: "truefalse",
+    true_false: "truefalse",
+    truefalse_choice: "truefalse",
+    judge: "truefalse",
+    judgment: "truefalse",
+    boolean: "truefalse",
+    判断: "truefalse",
+    判断题: "truefalse",
     qa: "qa",
     question: "qa",
     short: "qa",
@@ -427,7 +446,14 @@ function normalizeType(type) {
     问答: "qa",
     简答: "qa",
   };
-  return map[key] || (["single", "multiple", "qa"].includes(key) ? key : "single");
+  return map[key] || (["single", "multiple", "truefalse", "qa"].includes(key) ? key : "single");
+}
+
+function getTrueFalseOptions() {
+  return [
+    { key: "A", text: "正确" },
+    { key: "B", text: "错误" },
+  ];
 }
 
 function normalizeOptions(options) {
@@ -460,6 +486,12 @@ function normalizeAnswer(answer, type) {
     return String(answer || "").trim();
   }
 
+  if (type === "truefalse") {
+    const values = Array.isArray(answer) ? answer : [answer];
+    const normalized = values.map(normalizeTrueFalseAnswer).filter(Boolean);
+    return normalized.length ? [normalized[0]] : [];
+  }
+
   if (Array.isArray(answer)) {
     return answer.map(normalizeChoiceKey).filter(Boolean);
   }
@@ -476,6 +508,40 @@ function normalizeAnswer(answer, type) {
   }
 
   return [normalizeChoiceKey(text)];
+}
+
+function normalizeTrueFalseAnswer(answer) {
+  if (typeof answer === "boolean") {
+    return answer ? "A" : "B";
+  }
+
+  const key = String(answer ?? "").trim().toLowerCase();
+  const map = {
+    true: "A",
+    t: "A",
+    yes: "A",
+    y: "A",
+    correct: "A",
+    right: "A",
+    "1": "A",
+    对: "A",
+    是: "A",
+    正确: "A",
+    "√": "A",
+    false: "B",
+    f: "B",
+    no: "B",
+    n: "B",
+    incorrect: "B",
+    wrong: "B",
+    "0": "B",
+    错: "B",
+    否: "B",
+    错误: "B",
+    "×": "B",
+  };
+  const choiceKey = normalizeChoiceKey(answer);
+  return map[key] || (["A", "B"].includes(choiceKey) ? choiceKey : "");
 }
 
 function normalizeChoiceKey(key) {
@@ -638,6 +704,14 @@ function parseQuestionTypeParam(value) {
     multiple_choice: "multiple",
     multiplechoice: "multiple",
     多选: "multiple",
+    truefalse: "truefalse",
+    true_false: "truefalse",
+    truefalse_choice: "truefalse",
+    judge: "truefalse",
+    judgment: "truefalse",
+    boolean: "truefalse",
+    判断: "truefalse",
+    判断题: "truefalse",
     qa: "qa",
     question: "qa",
     short: "qa",
@@ -1295,7 +1369,7 @@ function chooseOption(key) {
 
   let value = Array.isArray(record.value) ? [...record.value] : [];
 
-  if (question.type === "single") {
+  if (question.type === "single" || question.type === "truefalse") {
     value = [key];
   } else {
     value = value.includes(key) ? value.filter((item) => item !== key) : [...value, key];

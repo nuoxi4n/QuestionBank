@@ -44,6 +44,20 @@ http://127.0.0.1:5500/
 }
 ```
 
+判断题示例：
+
+```json
+{
+  "id": "FE008",
+  "type": "truefalse",
+  "category": "JavaScript",
+  "difficulty": "easy",
+  "stem": "const 声明的变量不能被重新赋值。",
+  "answer": true,
+  "explanation": "const 声明的绑定不可重新赋值。"
+}
+```
+
 问答题示例：
 
 ```json
@@ -66,8 +80,8 @@ http://127.0.0.1:5500/
 | 参数 | 可选值 | 说明 |
 | --- | --- | --- |
 | `mode` | `sequence` / `random` / `exam` | 刷题模式：顺序、随机、模拟考试 |
-| `type` | `sequence` / `random` / `exam` / `single` / `multiple` / `qa` | 兼容写法；建议刷题模式优先用 `mode`，题型优先用 `qtype` |
-| `qtype` | `single` / `multiple` / `qa` | 题型筛选：单选、多选、问答 |
+| `type` | `sequence` / `random` / `exam` / `single` / `multiple` / `truefalse` / `qa` | 兼容写法；建议刷题模式优先用 `mode`，题型优先用 `qtype` |
+| `qtype` | `single` / `multiple` / `truefalse` / `qa` | 题型筛选：单选、多选、判断、问答 |
 | `category` | 题库中的分类名 | 分类筛选 |
 | `level` | `easy` / `medium` / `hard` | 难度筛选 |
 | `count` | 正整数 | 随机刷题或模拟考试抽题数量 |
