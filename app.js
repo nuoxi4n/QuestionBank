@@ -17,6 +17,14 @@ const DIFFICULTY_LABELS = {
   hard: "困难",
 };
 
+const DEFAULT_BANK_SOURCES = [
+  {
+    id: "default",
+    title: "前端综合题库",
+    url: "./question-bank.json",
+  },
+];
+
 const FALLBACK_QUESTIONS = [
   {
     id: "F001",
@@ -71,9 +79,12 @@ const FALLBACK_QUESTIONS = [
 
 const state = {
   bank: [],
+  bankSources: [],
+  selectedBankId: "",
   mode: "sequence",
   session: null,
   source: "",
+  urlPresetApplied: false,
   autoNext: false,
   autoNextDelayMs: 3000,
   autoNextTimer: 0,
@@ -93,12 +104,13 @@ function init() {
   loadSettings();
   bindEvents();
   updateModeControls();
-  loadDefaultBank();
+  loadBankCatalog();
 }
 
 function collectElements() {
   els = {
     bankFile: document.querySelector("#bankFile"),
+    bankSelect: document.querySelector("#bankSelect"),
     reloadBankBtn: document.querySelector("#reloadBankBtn"),
     startBtn: document.querySelector("#startBtn"),
     openSettingsBtn: document.querySelector("#openSettingsBtn"),
@@ -229,7 +241,8 @@ function bindEvents() {
     writeStoredString("questionbank.navigationShortcutMode", state.navigationShortcutMode);
     showToast("已更新切题快捷键");
   });
-  els.reloadBankBtn.addEventListener("click", () => loadDefaultBank());
+  els.bankSelect.addEventListener("change", () => loadSelectedBank(els.bankSelect.value));
+  els.reloadBankBtn.addEventListener("click", () => reloadSelectedBank());
   els.bankFile.addEventListener("change", handleBankFile);
   els.prevBtn.addEventListener("click", () => goRelative(-1));
   els.nextBtn.addEventListener("click", () => goRelative(1));
@@ -348,25 +361,110 @@ function closeSettingsDialog() {
   }
 }
 
-async function loadDefaultBank() {
+async function loadBankCatalog() {
   els.bankSource.textContent = "题库读取中";
 
+  const sources = await loadBankSources();
+  state.bankSources = sources;
+  populateBankSelect();
+
+  const params = new URLSearchParams(window.location.search);
+  const bankFromUrl = getParam(params, ["bank"]);
+  const storedBankId = readStoredString("questionbank.selectedBankId", "");
+  const selectedSource =
+    findBankSource(bankFromUrl) || findBankSource(storedBankId) || state.bankSources[0];
+
+  await loadSelectedBank(selectedSource?.id || "");
+}
+
+async function loadBankSources() {
   try {
-    const response = await fetch("./question-bank.json", { cache: "no-store" });
+    const response = await fetch("./question-banks.json", { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
 
-    const data = await response.json();
-    const bank = normalizeBank(data);
-    setBank(bank, "question-bank.json");
-    showToast("已读取 question-bank.json");
+    return normalizeBankSources(await response.json());
+  } catch (error) {
+    console.warn(error);
+    return DEFAULT_BANK_SOURCES;
+  }
+}
+
+function normalizeBankSources(raw) {
+  const list = Array.isArray(raw) ? raw : raw?.banks;
+  if (!Array.isArray(list)) return DEFAULT_BANK_SOURCES;
+
+  const sources = list
+    .map((item, index) => ({
+      id: String(item.id || item.name || `bank-${index + 1}`).trim(),
+      title: String(item.title || item.label || item.name || item.id || `题库 ${index + 1}`).trim(),
+      url: String(item.url || item.path || "").trim(),
+    }))
+    .filter((item) => item.id && item.title && item.url);
+
+  return sources.length ? sources : DEFAULT_BANK_SOURCES;
+}
+
+function populateBankSelect() {
+  els.bankSelect.innerHTML = state.bankSources
+    .map((source) => `<option value="${escapeHtml(source.id)}">${escapeHtml(source.title)}</option>`)
+    .join("");
+
+  if (state.selectedBankId && findBankSource(state.selectedBankId)) {
+    els.bankSelect.value = state.selectedBankId;
+  }
+}
+
+async function loadSelectedBank(id) {
+  const source = findBankSource(id) || state.bankSources[0];
+  if (!source) {
+    setBank(normalizeBank(FALLBACK_QUESTIONS), "内置示例题库", { bankId: "fallback" });
+    showToast("未找到可用题库，已使用内置示例题库");
+    return;
+  }
+
+  state.selectedBankId = source.id;
+  els.bankSelect.value = source.id;
+  writeStoredString("questionbank.selectedBankId", source.id);
+  els.bankSource.textContent = "题库读取中";
+
+  try {
+    const bank = source.bank || (await fetchBank(source.url));
+    setBank(bank, source.title, { bankId: source.id });
+    showToast(`已切换到 ${source.title}`);
   } catch (error) {
     const bank = normalizeBank(FALLBACK_QUESTIONS);
-    setBank(bank, "内置示例题库");
-    showToast("未能读取 question-bank.json，已使用内置示例题库");
+    setBank(bank, "内置示例题库", { bankId: "fallback" });
+    showToast(`未能读取 ${source.title}，已使用内置示例题库`);
     console.warn(error);
   }
+}
+
+async function reloadSelectedBank() {
+  const source = findBankSource(state.selectedBankId) || state.bankSources[0];
+  if (!source) return;
+
+  if (source.bank) {
+    setBank(source.bank, source.title, { bankId: source.id, applyPreset: false });
+    showToast(`已重新载入 ${source.title}`);
+    return;
+  }
+
+  await loadSelectedBank(source.id);
+}
+
+async function fetchBank(url) {
+  const response = await fetch(url, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+
+  return normalizeBank(await response.json());
+}
+
+function findBankSource(id) {
+  return state.bankSources.find((source) => source.id === id);
 }
 
 function handleBankFile(event) {
@@ -378,7 +476,9 @@ function handleBankFile(event) {
     try {
       const data = JSON.parse(String(reader.result || ""));
       const bank = normalizeBank(data);
-      setBank(bank, file.name);
+      const source = addImportedBankSource(file.name, bank);
+      populateBankSelect();
+      setBank(bank, source.title, { bankId: source.id, applyPreset: false });
       showToast(`已导入 ${file.name}`);
     } catch (error) {
       showToast("JSON 题库格式无效");
@@ -390,11 +490,36 @@ function handleBankFile(event) {
   reader.readAsText(file, "utf-8");
 }
 
-function setBank(bank, source) {
+function addImportedBankSource(fileName, bank) {
+  const id = `import:${Date.now()}`;
+  const source = {
+    id,
+    title: fileName,
+    bank,
+  };
+
+  state.bankSources = state.bankSources.filter((item) => item.id !== id).concat(source);
+  state.selectedBankId = id;
+  writeStoredString("questionbank.selectedBankId", id);
+  return source;
+}
+
+function setBank(bank, source, options = {}) {
   state.bank = bank;
   state.source = source;
+  if (options.bankId) {
+    state.selectedBankId = options.bankId;
+    if (findBankSource(options.bankId)) {
+      els.bankSelect.value = options.bankId;
+    }
+  }
+
   populateFilters();
-  const shouldStart = applyUrlPreset();
+  const shouldApplyPreset = options.applyPreset ?? !state.urlPresetApplied;
+  const shouldStart = shouldApplyPreset ? applyUrlPreset() : false;
+  if (shouldApplyPreset) {
+    state.urlPresetApplied = true;
+  }
   updateQuantityLimits();
 
   if (shouldStart) {

@@ -1,10 +1,10 @@
 # QuestionBank Glass
 
-纯前端刷题页面，支持顺序刷题、随机刷题、模拟考试，题库来自 JSON 文件。
+纯前端刷题页面，支持顺序刷题、随机刷题、模拟考试和多题库切换，题库来自 JSON 文件。
 
 ## 运行
 
-建议用本地静态服务打开，避免浏览器拦截 `fetch("./question-bank.json")`：
+建议用本地静态服务打开，避免浏览器拦截 `fetch("./question-banks.json")` 和题库 JSON：
 
 ```bash
 python -m http.server 5500
@@ -18,7 +18,21 @@ http://127.0.0.1:5500/
 
 ## 题库格式
 
-默认读取 `question-bank.json`。根节点可以是题目数组，也可以是：
+默认先读取 `question-banks.json` 作为题库清单，再按当前选择读取对应题库。清单格式：
+
+```json
+{
+  "banks": [
+    {
+      "id": "frontend",
+      "title": "前端综合题库",
+      "url": "./question-bank.json"
+    }
+  ]
+}
+```
+
+如果清单读取失败，会退回读取 `question-bank.json`。单个题库文件的根节点可以是题目数组，也可以是：
 
 ```json
 {
@@ -80,6 +94,7 @@ http://127.0.0.1:5500/
 | 参数 | 可选值 | 说明 |
 | --- | --- | --- |
 | `mode` | `sequence` / `random` / `exam` | 刷题模式：顺序、随机、模拟考试 |
+| `bank` | `question-banks.json` 中的题库 `id` | 默认选中的题库 |
 | `type` | `sequence` / `random` / `exam` / `single` / `multiple` / `truefalse` / `qa` | 兼容写法；建议刷题模式优先用 `mode`，题型优先用 `qtype` |
 | `qtype` | `single` / `multiple` / `truefalse` / `qa` | 题型筛选：单选、多选、判断、问答 |
 | `category` | 题库中的分类名 | 分类筛选 |
@@ -97,7 +112,7 @@ http://127.0.0.1:5500/
 20 题、45 分钟模拟考试：
 
 ```text
-http://127.0.0.1:5500/?mode=exam&count=20&minutes=45&start=1
+http://127.0.0.1:5500/?bank=frontend&mode=exam&count=20&minutes=45&start=1
 ```
 
 只抽 10 道单选题做模拟考试：

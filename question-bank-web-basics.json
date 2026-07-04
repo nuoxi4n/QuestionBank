@@ -1,0 +1,70 @@
+{
+  "version": "1.0.0",
+  "title": "Web 基础速练",
+  "questions": [
+    {
+      "id": "WB001",
+      "type": "single",
+      "category": "HTML",
+      "difficulty": "easy",
+      "stem": "HTML 文档的根元素通常是？",
+      "options": [
+        { "key": "A", "text": "<head>" },
+        { "key": "B", "text": "<body>" },
+        { "key": "C", "text": "<html>" },
+        { "key": "D", "text": "<main>" }
+      ],
+      "answer": "C",
+      "explanation": "<html> 是 HTML 文档的根元素。"
+    },
+    {
+      "id": "WB002",
+      "type": "multiple",
+      "category": "CSS",
+      "difficulty": "easy",
+      "stem": "以下哪些 CSS 属性会影响文本样式？",
+      "options": [
+        { "key": "A", "text": "color" },
+        { "key": "B", "text": "font-size" },
+        { "key": "C", "text": "display" },
+        { "key": "D", "text": "line-height" }
+      ],
+      "answer": ["A", "B", "D"],
+      "explanation": "color、font-size、line-height 都直接影响文本呈现。"
+    },
+    {
+      "id": "WB003",
+      "type": "truefalse",
+      "category": "网络",
+      "difficulty": "easy",
+      "stem": "HTTP 状态码 404 通常表示请求的资源不存在。",
+      "answer": true,
+      "explanation": "404 Not Found 表示服务器找不到请求的资源。"
+    },
+    {
+      "id": "WB004",
+      "type": "single",
+      "category": "JavaScript",
+      "difficulty": "medium",
+      "stem": "哪个方法常用于把 JSON 字符串解析为对象？",
+      "options": [
+        { "key": "A", "text": "JSON.parse" },
+        { "key": "B", "text": "JSON.stringify" },
+        { "key": "C", "text": "Object.assign" },
+        { "key": "D", "text": "Array.from" }
+      ],
+      "answer": "A",
+      "explanation": "JSON.parse 会把合法的 JSON 字符串解析为 JavaScript 值。"
+    },
+    {
+      "id": "WB005",
+      "type": "qa",
+      "category": "浏览器",
+      "difficulty": "medium",
+      "stem": "简述 Cookie 的一个常见用途。",
+      "answer": "Cookie 常用于保存会话标识、登录状态或少量需要随请求发送的数据。",
+      "keywords": ["会话", "登录"],
+      "explanation": "Cookie 会按规则随 HTTP 请求发送，适合保存少量服务端需要读取的信息。"
+    }
+  ]
+}

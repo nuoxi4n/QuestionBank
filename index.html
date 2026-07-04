@@ -24,12 +24,16 @@
         </div>
 
         <div class="top-actions">
+          <label class="bank-picker" title="选择题库">
+            <i data-lucide="database"></i>
+            <select id="bankSelect" aria-label="选择题库"></select>
+          </label>
           <label class="icon-button file-trigger" title="导入 JSON 题库">
             <i data-lucide="upload"></i>
             <span>导入</span>
             <input id="bankFile" type="file" accept=".json,application/json" />
           </label>
-          <button id="reloadBankBtn" class="icon-button" type="button" title="重新读取 question-bank.json">
+          <button id="reloadBankBtn" class="icon-button" type="button" title="重新读取当前题库">
             <i data-lucide="refresh-cw"></i>
             <span>重载</span>
           </button>

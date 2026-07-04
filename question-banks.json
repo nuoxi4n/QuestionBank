@@ -1,0 +1,14 @@
+{
+  "banks": [
+    {
+      "id": "frontend",
+      "title": "前端综合题库",
+      "url": "./question-bank.json"
+    },
+    {
+      "id": "web-basics",
+      "title": "Web 基础速练",
+      "url": "./question-bank-web-basics.json"
+    }
+  ]
+}
