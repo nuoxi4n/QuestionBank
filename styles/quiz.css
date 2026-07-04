@@ -25,13 +25,13 @@
 .exam-timer {
   min-height: 42px;
   padding: 0 12px;
-  border: 1px solid rgba(20, 121, 255, 0.18);
+  border: 1px solid rgba(0, 122, 255, 0.18);
   border-radius: var(--radius);
   display: inline-flex;
   align-items: center;
   gap: 8px;
   color: var(--blue-dark);
-  background: rgba(219, 237, 255, 0.7);
+  background: rgba(229, 241, 255, 0.52);
   font-size: 14px;
   font-weight: 900;
   white-space: nowrap;
@@ -43,16 +43,16 @@
 }
 
 .exam-timer.is-urgent {
-  color: #a5152f;
-  border-color: rgba(226, 71, 104, 0.32);
-  background: rgba(255, 229, 235, 0.84);
+  color: #b42318;
+  border-color: rgba(255, 59, 48, 0.28);
+  background: rgba(255, 235, 233, 0.6);
 }
 
 .progress-track {
   height: 8px;
   border-radius: var(--radius);
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.34);
 }
 
 .progress-track span {
@@ -60,7 +60,7 @@
   width: 0;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--blue), var(--mint));
+  background: var(--blue);
   transition: width 220ms ease;
 }
 
@@ -75,7 +75,7 @@
 .empty-state {
   flex: 1;
   min-height: 360px;
-  border: 1px dashed rgba(54, 75, 105, 0.2);
+  border: 1px dashed rgba(60, 60, 67, 0.18);
   border-radius: var(--radius);
   display: grid;
   place-items: center;
@@ -83,7 +83,7 @@
   gap: 14px;
   color: var(--muted);
   text-align: center;
-  background: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .empty-state svg {
@@ -105,8 +105,8 @@
   border-radius: var(--radius);
   display: inline-flex;
   align-items: center;
-  color: #29415e;
-  background: rgba(255, 255, 255, 0.58);
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.38);
   border: 1px solid var(--line-dark);
   font-size: 12px;
   font-weight: 800;
@@ -114,8 +114,8 @@
 
 .type-pill {
   color: #fff;
-  border-color: rgba(118, 87, 232, 0.18);
-  background: linear-gradient(135deg, var(--violet), #4d8bff);
+  border-color: rgba(0, 122, 255, 0.18);
+  background: var(--blue);
 }
 
 .question-title {
@@ -141,7 +141,7 @@
   align-items: start;
   text-align: left;
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.56);
+  background: rgba(255, 255, 255, 0.42);
   cursor: pointer;
   transition:
     transform 160ms ease,
@@ -152,7 +152,7 @@
 
 .option-button:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.62);
 }
 
 .option-button.is-locked {
@@ -170,7 +170,7 @@
   display: grid;
   place-items: center;
   color: var(--blue-dark);
-  background: rgba(20, 121, 255, 0.1);
+  background: rgba(0, 122, 255, 0.1);
   font-weight: 900;
 }
 
@@ -186,14 +186,14 @@
   height: 22px;
   margin-top: 6px;
   border-radius: 50%;
-  border: 2px solid rgba(54, 75, 105, 0.24);
+  border: 2px solid rgba(60, 60, 67, 0.24);
   position: relative;
 }
 
 .option-button.is-selected {
-  border-color: rgba(20, 121, 255, 0.5);
-  background: rgba(219, 237, 255, 0.78);
-  box-shadow: 0 10px 24px rgba(20, 121, 255, 0.12);
+  border-color: rgba(0, 122, 255, 0.42);
+  background: rgba(229, 241, 255, 0.62);
+  box-shadow: 0 8px 20px rgba(0, 122, 255, 0.1);
 }
 
 .option-button.is-selected .option-mark {
@@ -224,13 +224,13 @@
 }
 
 .option-button.is-correct {
-  border-color: rgba(17, 165, 121, 0.45);
-  background: rgba(220, 255, 244, 0.82);
+  border-color: rgba(52, 199, 89, 0.38);
+  background: rgba(232, 248, 237, 0.64);
 }
 
 .option-button.is-wrong {
-  border-color: rgba(226, 71, 104, 0.45);
-  background: rgba(255, 229, 235, 0.82);
+  border-color: rgba(255, 59, 48, 0.34);
+  background: rgba(255, 235, 233, 0.68);
 }
 
 .answer-area {
@@ -263,22 +263,22 @@
   display: grid;
   gap: 10px;
   line-height: 1.62;
-  background: rgba(255, 255, 255, 0.62);
+  background: rgba(255, 255, 255, 0.42);
 }
 
 .feedback.is-correct {
-  border-color: rgba(17, 165, 121, 0.24);
-  background: rgba(224, 255, 244, 0.68);
+  border-color: rgba(52, 199, 89, 0.24);
+  background: rgba(232, 248, 237, 0.56);
 }
 
 .feedback.is-wrong {
-  border-color: rgba(226, 71, 104, 0.24);
-  background: rgba(255, 235, 239, 0.72);
+  border-color: rgba(255, 59, 48, 0.24);
+  background: rgba(255, 235, 233, 0.58);
 }
 
 .feedback.is-review {
-  border-color: rgba(183, 121, 31, 0.25);
-  background: rgba(255, 247, 225, 0.72);
+  border-color: rgba(255, 149, 0, 0.28);
+  background: rgba(255, 246, 230, 0.58);
 }
 
 .feedback-title {
@@ -323,7 +323,7 @@
 
 .palette-empty {
   min-height: 160px;
-  border: 1px dashed rgba(54, 75, 105, 0.2);
+  border: 1px dashed rgba(60, 60, 67, 0.18);
   border-radius: var(--radius);
   display: grid;
   place-items: center;
@@ -331,7 +331,7 @@
   gap: 8px;
   color: var(--muted);
   text-align: center;
-  background: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .palette-empty svg {
@@ -364,28 +364,28 @@
 
 .palette-button.is-active {
   color: #fff;
-  border-color: rgba(20, 121, 255, 0.35);
+  border-color: rgba(0, 122, 255, 0.35);
   background: var(--blue);
 }
 
 .palette-button.is-answered {
   color: var(--blue-dark);
-  background: rgba(219, 237, 255, 0.84);
+  background: rgba(229, 241, 255, 0.58);
 }
 
 .palette-button.is-correct {
-  color: #0b684e;
-  background: rgba(218, 255, 243, 0.86);
+  color: #1f6f3b;
+  background: rgba(232, 248, 237, 0.64);
 }
 
 .palette-button.is-wrong {
-  color: #b71d3a;
-  background: rgba(255, 229, 235, 0.86);
+  color: #b42318;
+  background: rgba(255, 235, 233, 0.66);
 }
 
 .palette-button.is-review {
-  color: #865813;
-  background: rgba(255, 245, 218, 0.92);
+  color: #8a4b00;
+  background: rgba(255, 246, 230, 0.68);
 }
 
 .palette-gap {
