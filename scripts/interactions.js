@@ -211,6 +211,7 @@ function submitCurrent() {
   };
 
   renderAll();
+  showRandomResultIfComplete();
   scheduleAutoNext(question, updatedRecord);
 }
 
@@ -227,6 +228,7 @@ function revealCurrent() {
   };
 
   renderAll();
+  showRandomResultIfComplete();
 }
 
 async function submitExam(options = {}) {
@@ -303,6 +305,16 @@ function gradeCurrentQa(correct) {
   };
 
   renderAll();
+  showRandomResultIfComplete();
+}
+
+function showRandomResultIfComplete() {
+  const session = state.session;
+  if (!session || session.mode !== "random" || session.resultShown) return;
+  if (!isSessionComplete(session)) return;
+
+  session.resultShown = true;
+  showResultDialog();
 }
 
 function scheduleAutoNext(question, record) {
@@ -310,6 +322,7 @@ function scheduleAutoNext(question, record) {
   clearAutoNextTimer();
 
   if (!state.autoNext || !session || session.mode === "exam" || session.submitted) return;
+  if (isSessionComplete(session)) return;
   if (session.currentIndex >= session.questions.length - 1) return;
   if (question.type === "qa" && record.correct === null) return;
 
