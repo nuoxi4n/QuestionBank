@@ -241,8 +241,17 @@
 
 .result-strip strong,
 .result-metrics strong {
-  font-size: 23px;
+  min-width: 0;
   line-height: 1;
+  overflow-wrap: anywhere;
+}
+
+.result-strip strong {
+  font-size: 18px;
+}
+
+.result-metrics strong {
+  font-size: 23px;
 }
 
 .bank-status {

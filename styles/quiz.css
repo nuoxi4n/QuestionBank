@@ -405,8 +405,9 @@
 
 .result-strip div {
   min-height: 64px;
-  padding: 12px;
+  padding: 11px;
   display: grid;
   align-content: space-between;
+  gap: 8px;
 }
 

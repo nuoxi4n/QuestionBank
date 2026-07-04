@@ -220,7 +220,7 @@ function renderHeader() {
   els.modeLabel.textContent = MODE_LABELS[session?.mode || state.mode];
   els.sessionTitle.textContent = session ? `${current} / ${total}` : "准备开始";
   els.progressBar.style.width = `${progress}%`;
-  els.progressText.textContent = `${current} / ${total}`;
+  els.progressText.textContent = session ? `${current} / ${total}` : "未开始";
   els.prevBtn.disabled = !session || session.currentIndex === 0;
   els.nextBtn.disabled = !session || session.currentIndex >= total - 1;
   els.exitSessionBtn.hidden = !session || Boolean(session.submitted);
@@ -285,10 +285,10 @@ function renderStats() {
   const session = state.session;
   const total = session?.questions.length || 0;
   const examPending = Boolean(session && session.mode === "exam" && !session.submitted);
-  els.paletteAnswered.textContent = String(stats.answered);
-  els.paletteRemaining.textContent = String(Math.max(total - stats.answered, 0));
-  els.paletteAccuracyLabel.textContent = examPending ? "评分" : "正确率";
-  els.paletteAccuracy.textContent = examPending ? "交卷后" : `${stats.accuracy}%`;
+  els.paletteAnswered.textContent = `${stats.answered} 题`;
+  els.paletteRemaining.textContent = `${Math.max(total - stats.answered, 0)} 题`;
+  els.paletteAccuracyLabel.textContent = examPending ? "评分状态" : "正确率";
+  els.paletteAccuracy.textContent = examPending ? "交卷后显示" : `${stats.accuracy}%`;
   if (!state.bank.length && !state.bankLoading) {
     const source = findBankSource(state.selectedBankId);
     els.bankSource.textContent = source ? `已选择 ${source.title}，点击开始加载题库` : "题库未加载";
