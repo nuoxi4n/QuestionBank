@@ -75,7 +75,7 @@ const state = {
   session: null,
   source: "",
   autoNext: false,
-  autoNextDelayMs: 950,
+  autoNextDelayMs: 3000,
   autoNextTimer: 0,
   examTimerInterval: 0,
   optionShortcutMode: "number",
@@ -106,6 +106,8 @@ function collectElements() {
     closeSettingsBtn: document.querySelector("#closeSettingsBtn"),
     applySettingsBtn: document.querySelector("#applySettingsBtn"),
     modeButtons: [...document.querySelectorAll(".mode-button")],
+    settingsGrid: document.querySelector(".settings-grid"),
+    quantitySettingsGroup: document.querySelector("#quantitySettingsGroup"),
     configFields: [...document.querySelectorAll("[data-config-for]")],
     configSummary: document.querySelector("#configSummary"),
     autoNextSetting: document.querySelector("#autoNextSetting"),
@@ -255,7 +257,7 @@ function bindEvents() {
 
 function loadSettings() {
   state.autoNext = readStoredBoolean("questionbank.autoNext", false);
-  state.autoNextDelayMs = readStoredClampedNumber("questionbank.autoNextDelayMs", 950, 0, 10000);
+  state.autoNextDelayMs = readStoredClampedNumber("questionbank.autoNextDelayMs", 3000, 0, 10000);
   state.optionShortcutMode = readStoredChoice("questionbank.optionShortcutMode", "number", [
     "number",
     "letter",
@@ -781,6 +783,8 @@ function updateModeControls() {
     field.classList.toggle("is-hidden", targetMode !== state.mode);
   });
 
+  els.settingsGrid.classList.toggle("is-sequence", state.mode === "sequence");
+  els.quantitySettingsGroup.classList.toggle("is-hidden", state.mode === "sequence");
   els.autoNextSetting.classList.toggle("is-hidden", state.mode === "exam");
   els.autoNextDelayField.classList.toggle("is-hidden", state.mode === "exam");
   if (state.mode === "exam") {
@@ -880,7 +884,7 @@ function getExamMinutes() {
 
 function getAutoNextDelayMs() {
   const value = Number(els.autoNextDelayMs.value);
-  const delay = Number.isFinite(value) ? Math.floor(value) : 950;
+  const delay = Number.isFinite(value) ? Math.floor(value) : 3000;
   const clamped = clamp(delay, 0, 10000);
   els.autoNextDelayMs.value = String(clamped);
   return clamped;

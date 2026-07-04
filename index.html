@@ -154,7 +154,7 @@
       <h2>刷题设置</h2>
 
       <div class="settings-grid">
-        <section class="settings-group">
+        <section class="settings-group is-filters">
           <div class="section-title">
             <i data-lucide="filter"></i>
             <span>筛选</span>
@@ -175,7 +175,7 @@
           </div>
         </section>
 
-        <section class="settings-group">
+        <section class="settings-group is-quantity" id="quantitySettingsGroup">
           <div class="section-title">
             <i data-lucide="timer"></i>
             <span>数量与时间</span>
@@ -196,7 +196,7 @@
           </div>
         </section>
 
-        <section class="settings-group">
+        <section class="settings-group is-actions">
           <div class="section-title">
             <i data-lucide="keyboard"></i>
             <span>操作</span>
@@ -234,7 +234,7 @@
             </label>
             <label class="field auto-next-field" id="autoNextDelayField">
               <span>下一题延迟（ms）</span>
-              <input id="autoNextDelayMs" type="number" min="0" max="10000" step="50" value="950" />
+              <input id="autoNextDelayMs" type="number" min="0" max="10000" step="50" value="3000" />
             </label>
           </div>
         </section>
