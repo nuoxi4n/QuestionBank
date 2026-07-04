@@ -123,7 +123,7 @@ function sampleQuestions(pool, count) {
 }
 
 function prepareSessionQuestions(questions) {
-  if (!state.answerShuffle) return questions;
+  if (!isAnswerShuffleEnabled()) return questions;
   return questions.map(shuffleQuestionOptions);
 }
 
@@ -288,7 +288,7 @@ function updateConfigSummary() {
     displayDifficulty(els.difficultySelect.value) || "全部难度",
   ];
 
-  if (state.answerShuffle) {
+  if (isAnswerShuffleEnabled()) {
     chips.push("答案选项乱序");
   }
 

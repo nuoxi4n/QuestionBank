@@ -26,6 +26,7 @@ function collectElements() {
     configSummary: document.querySelector("#configSummary"),
     autoNextSetting: document.querySelector("#autoNextSetting"),
     autoNextToggle: document.querySelector("#autoNextToggle"),
+    answerShuffleSetting: document.querySelector("#answerShuffleSetting"),
     answerShuffleToggle: document.querySelector("#answerShuffleToggle"),
     autoNextDelayField: document.querySelector("#autoNextDelayField"),
     autoNextDelayMs: document.querySelector("#autoNextDelayMs"),

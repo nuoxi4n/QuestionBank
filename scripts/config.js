@@ -183,3 +183,7 @@ const state = {
 let els = {};
 let confirmResolver = null;
 
+function isAnswerShuffleEnabled(mode = state.mode) {
+  return mode === "exam" || state.answerShuffle;
+}
+

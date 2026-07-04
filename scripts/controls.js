@@ -169,6 +169,9 @@ function updateModeControls() {
   els.quantitySettingsGroup.classList.toggle("is-hidden", state.mode === "sequence");
   els.autoNextSetting.classList.toggle("is-hidden", state.mode === "exam");
   els.autoNextDelayField.classList.toggle("is-hidden", state.mode === "exam");
+  els.answerShuffleSetting.classList.toggle("is-hidden", state.mode === "exam");
+  els.answerShuffleToggle.checked = isAnswerShuffleEnabled();
+  els.answerShuffleToggle.disabled = state.mode === "exam";
   els.focusLayoutToggle.checked = state.mode === "exam" || state.focusLayout;
   els.focusLayoutToggle.disabled = state.mode === "exam";
   els.focusLayoutSetting.classList.toggle("is-hidden", state.mode === "exam");
