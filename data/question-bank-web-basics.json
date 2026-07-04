@@ -6,7 +6,7 @@
       "id": "WB001",
       "type": "single",
       "category": "HTML",
-      "difficulty": "easy",
+      "level": "easy",
       "stem": "HTML 文档的根元素通常是？",
       "options": [
         { "key": "A", "text": "<head>" },
@@ -21,7 +21,7 @@
       "id": "WB002",
       "type": "multiple",
       "category": "CSS",
-      "difficulty": "easy",
+      "level": "easy",
       "stem": "以下哪些 CSS 属性会影响文本样式？",
       "options": [
         { "key": "A", "text": "color" },
@@ -36,7 +36,7 @@
       "id": "WB003",
       "type": "truefalse",
       "category": "网络",
-      "difficulty": "easy",
+      "level": "easy",
       "stem": "HTTP 状态码 404 通常表示请求的资源不存在。",
       "answer": true,
       "explanation": "404 Not Found 表示服务器找不到请求的资源。"
@@ -45,7 +45,7 @@
       "id": "WB004",
       "type": "single",
       "category": "JavaScript",
-      "difficulty": "medium",
+      "level": "medium",
       "stem": "哪个方法常用于把 JSON 字符串解析为对象？",
       "options": [
         { "key": "A", "text": "JSON.parse" },
@@ -60,7 +60,7 @@
       "id": "WB005",
       "type": "qa",
       "category": "浏览器",
-      "difficulty": "medium",
+      "level": "medium",
       "stem": "简述 Cookie 的一个常见用途。",
       "answer": "Cookie 常用于保存会话标识、登录状态或少量需要随请求发送的数据。",
       "keywords": ["会话", "登录"],

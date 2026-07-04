@@ -90,8 +90,8 @@ async function exitSession() {
 function getFilteredBank() {
   const questionType = els.questionTypeSelect.value;
   const category = els.categorySelect.value;
-  const difficulty = els.difficultySelect.value;
-  const cacheKey = [state.bankVersion, questionType, category, difficulty].join("|");
+  const level = els.levelSelect.value;
+  const cacheKey = [state.bankVersion, questionType, category, level].join("|");
 
   if (state.filterCache.key === cacheKey) {
     return state.filterCache.questions;
@@ -100,8 +100,8 @@ function getFilteredBank() {
   const questions = state.bank.filter((question) => {
     const typeMatched = !questionType || question.type === questionType;
     const categoryMatched = !category || question.category === category;
-    const difficultyMatched = !difficulty || question.difficulty === difficulty;
-    return typeMatched && categoryMatched && difficultyMatched;
+    const levelMatched = !level || question.level === level;
+    return typeMatched && categoryMatched && levelMatched;
   });
 
   state.filterCache = {
@@ -310,7 +310,7 @@ function updateConfigSummary() {
   const chips = [
     displayQuestionType(els.questionTypeSelect.value) || "全部题型",
     els.categorySelect.value || "全部分类",
-    displayDifficulty(els.difficultySelect.value) || "全部难度",
+    displayDifficulty(els.levelSelect.value) || "全部难度",
   ];
 
   if (isAnswerShuffleEnabled()) {
@@ -374,7 +374,7 @@ function renderQuestion() {
     <div class="question-meta">
       <span class="type-pill">${escapeHtml(TYPE_LABELS[question.type] || "题目")}</span>
       <span class="tag-pill">${escapeHtml(question.category)}</span>
-      <span class="tag-pill">${escapeHtml(displayDifficulty(question.difficulty))}</span>
+      <span class="tag-pill">${escapeHtml(displayDifficulty(question.level))}</span>
       <span class="tag-pill">ID ${escapeHtml(question.id)}</span>
     </div>
     <h3 class="question-title">${escapeHtml(question.stem)}</h3>

@@ -1,11 +1,11 @@
 function populateFilters() {
   const questionTypes = uniqueValues(state.bank.map((question) => question.type));
   const categories = uniqueValues(state.bank.map((question) => question.category));
-  const difficulties = uniqueValues(state.bank.map((question) => question.difficulty));
+  const difficulties = uniqueValues(state.bank.map((question) => question.level));
 
   fillSelect(els.questionTypeSelect, questionTypes, "全部题型", displayQuestionType);
   fillSelect(els.categorySelect, categories, "全部分类", (value) => value);
-  fillSelect(els.difficultySelect, difficulties, "全部难度", displayDifficulty);
+  fillSelect(els.levelSelect, difficulties, "全部难度", displayDifficulty);
 }
 
 function fillSelect(select, values, allLabel, labeler) {
@@ -59,7 +59,7 @@ function applyUrlPreset() {
 
   setSelectFromParam(els.questionTypeSelect, explicitQuestionType);
   setSelectFromParam(els.categorySelect, getParam(params, ["category"]));
-  setSelectFromParam(els.difficultySelect, parseDifficultyParam(getParam(params, ["level"])));
+  setSelectFromParam(els.levelSelect, parseDifficultyParam(getParam(params, ["level"])));
 
   const count = getPositiveInteger(getParam(params, ["count"]));
   const examCount = getPositiveInteger(getParam(params, ["examCount", "exam_count"])) || getPositiveInteger(examShortcut);

@@ -78,7 +78,7 @@ scripts/interactions.js     作答交互、评分、导航、结果/确认弹窗
   "id": "FE001",
   "type": "single",
   "category": "HTML",
-  "difficulty": "easy",
+  "level": "easy",
   "stem": "HTML 中用于引入外部样式表的标签是？",
   "options": [
     { "key": "A", "text": "<script>" },
@@ -96,7 +96,7 @@ scripts/interactions.js     作答交互、评分、导航、结果/确认弹窗
   "id": "FE008",
   "type": "truefalse",
   "category": "JavaScript",
-  "difficulty": "easy",
+  "level": "easy",
   "stem": "const 声明的变量不能被重新赋值。",
   "answer": true,
   "explanation": "const 声明的绑定不可重新赋值。"
@@ -110,7 +110,7 @@ scripts/interactions.js     作答交互、评分、导航、结果/确认弹窗
   "id": "FE009",
   "type": "qa",
   "category": "浏览器",
-  "difficulty": "medium",
+  "level": "medium",
   "stem": "简述 localStorage 与 sessionStorage 的主要区别。",
   "answer": "localStorage 长期保存；sessionStorage 在当前会话中保存。",
   "keywords": ["localStorage", "sessionStorage"],

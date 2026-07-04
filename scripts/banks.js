@@ -278,7 +278,7 @@ function normalizeQuestion(item, index) {
     answer: normalizeAnswer(answer, type),
     explanation: String(item.explanation || item.analysis || item["解析"] || "").trim(),
     category: String(item.category || item.subject || item["分类"] || "未分类").trim() || "未分类",
-    difficulty: normalizeDifficulty(item.difficulty || item.level || item["难度"] || "medium"),
+    level: normalizeDifficulty(item.level || "medium"),
     keywords: Array.isArray(item.keywords)
       ? item.keywords.map((keyword) => String(keyword).trim()).filter(Boolean)
       : [],

@@ -37,7 +37,7 @@ function collectElements() {
     navigationShortcutSelect: document.querySelector("#navigationShortcutSelect"),
     questionTypeSelect: document.querySelector("#questionTypeSelect"),
     categorySelect: document.querySelector("#categorySelect"),
-    difficultySelect: document.querySelector("#difficultySelect"),
+    levelSelect: document.querySelector("#levelSelect"),
     randomCount: document.querySelector("#randomCount"),
     examCount: document.querySelector("#examCount"),
     examMinutes: document.querySelector("#examMinutes"),
@@ -97,7 +97,7 @@ function bindEvents() {
     renderStats();
   });
 
-  els.difficultySelect.addEventListener("change", () => {
+  els.levelSelect.addEventListener("change", () => {
     updateQuantityLimits();
     renderStats();
   });

@@ -6,7 +6,7 @@
       "id": "FE001",
       "type": "single",
       "category": "HTML",
-      "difficulty": "easy",
+      "level": "easy",
       "stem": "HTML 中用于引入外部样式表的标签是？",
       "options": [
         { "key": "A", "text": "<script>" },
@@ -21,7 +21,7 @@
       "id": "FE002",
       "type": "single",
       "category": "CSS",
-      "difficulty": "medium",
+      "level": "medium",
       "stem": "实现玻璃拟态中背景模糊效果时，最常用的 CSS 属性是？",
       "options": [
         { "key": "A", "text": "filter" },
@@ -36,7 +36,7 @@
       "id": "FE003",
       "type": "multiple",
       "category": "JavaScript",
-      "difficulty": "medium",
+      "level": "medium",
       "stem": "以下哪些数组方法通常会返回一个新数组？",
       "options": [
         { "key": "A", "text": "map" },
@@ -51,7 +51,7 @@
       "id": "FE004",
       "type": "multiple",
       "category": "HTML",
-      "difficulty": "easy",
+      "level": "easy",
       "stem": "以下哪些元素属于语义化 HTML 元素？",
       "options": [
         { "key": "A", "text": "<article>" },
@@ -66,7 +66,7 @@
       "id": "FE005",
       "type": "single",
       "category": "浏览器",
-      "difficulty": "medium",
+      "level": "medium",
       "stem": "DOMContentLoaded 事件触发时，下列说法更准确的是？",
       "options": [
         { "key": "A", "text": "页面所有图片都已加载完成" },
@@ -81,7 +81,7 @@
       "id": "FE006",
       "type": "multiple",
       "category": "JavaScript",
-      "difficulty": "easy",
+      "level": "easy",
       "stem": "Promise 可能处于哪些状态？",
       "options": [
         { "key": "A", "text": "pending" },
@@ -96,7 +96,7 @@
       "id": "FE007",
       "type": "single",
       "category": "CSS",
-      "difficulty": "easy",
+      "level": "easy",
       "stem": "在 Flex 布局中，控制主轴对齐方式的属性是？",
       "options": [
         { "key": "A", "text": "align-items" },
@@ -111,7 +111,7 @@
       "id": "FE008",
       "type": "single",
       "category": "网络",
-      "difficulty": "medium",
+      "level": "medium",
       "stem": "以下哪个 HTTP 方法通常被认为是幂等的？",
       "options": [
         { "key": "A", "text": "POST" },
@@ -126,7 +126,7 @@
       "id": "FE009",
       "type": "truefalse",
       "category": "JavaScript",
-      "difficulty": "easy",
+      "level": "easy",
       "stem": "const 声明的变量不能被重新赋值。",
       "answer": true,
       "explanation": "const 声明创建的是只读绑定，不能重新赋值。"
@@ -135,7 +135,7 @@
       "id": "FE010",
       "type": "qa",
       "category": "浏览器",
-      "difficulty": "medium",
+      "level": "medium",
       "stem": "简述 localStorage 与 sessionStorage 的主要区别。",
       "answer": "localStorage 数据长期保存，除非主动删除；sessionStorage 只在当前页面会话中保存，标签页关闭后通常会被清除。",
       "keywords": ["localStorage", "sessionStorage", "关闭"],
@@ -145,7 +145,7 @@
       "id": "FE011",
       "type": "qa",
       "category": "JavaScript",
-      "difficulty": "hard",
+      "level": "hard",
       "stem": "说明宏任务与微任务在事件循环中的执行顺序。",
       "answer": "一次事件循环会先执行一个宏任务，随后清空当前产生的微任务队列，再进入渲染或下一轮宏任务。",
       "keywords": ["宏任务", "微任务", "队列"],
@@ -155,7 +155,7 @@
       "id": "FE012",
       "type": "qa",
       "category": "CSS",
-      "difficulty": "medium",
+      "level": "medium",
       "stem": "简述标准盒模型中 width 的含义。",
       "answer": "标准盒模型中 width 只表示内容区宽度，不包含 padding、border 和 margin。",
       "keywords": ["内容", "padding", "border"],
@@ -165,7 +165,7 @@
       "id": "FE013",
       "type": "multiple",
       "category": "可访问性",
-      "difficulty": "medium",
+      "level": "medium",
       "stem": "以下哪些做法有助于提升 Web 可访问性？",
       "options": [
         { "key": "A", "text": "为有意义的图片提供 alt 文本" },
