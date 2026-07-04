@@ -74,7 +74,8 @@ const state = {
   mode: "sequence",
   session: null,
   source: "",
-  autoNext: true,
+  autoNext: false,
+  autoNextDelayMs: 950,
   autoNextTimer: 0,
   examTimerInterval: 0,
   optionShortcutMode: "number",
@@ -109,6 +110,8 @@ function collectElements() {
     configSummary: document.querySelector("#configSummary"),
     autoNextSetting: document.querySelector("#autoNextSetting"),
     autoNextToggle: document.querySelector("#autoNextToggle"),
+    autoNextDelayField: document.querySelector("#autoNextDelayField"),
+    autoNextDelayMs: document.querySelector("#autoNextDelayMs"),
     optionShortcutSelect: document.querySelector("#optionShortcutSelect"),
     submitShortcutSelect: document.querySelector("#submitShortcutSelect"),
     navigationShortcutSelect: document.querySelector("#navigationShortcutSelect"),
@@ -190,7 +193,9 @@ function bindEvents() {
   });
   els.autoNextToggle.addEventListener("change", () => {
     state.autoNext = els.autoNextToggle.checked;
+    state.autoNextDelayMs = getAutoNextDelayMs();
     writeStoredBoolean("questionbank.autoNext", state.autoNext);
+    writeStoredString("questionbank.autoNextDelayMs", String(state.autoNextDelayMs));
     clearAutoNextTimer();
     renderAll();
     if (state.autoNext && state.session) {
@@ -201,6 +206,11 @@ function bindEvents() {
       }
     }
     showToast(state.autoNext ? "已开启自动下一题" : "已关闭自动下一题");
+  });
+  els.autoNextDelayMs.addEventListener("change", () => {
+    state.autoNextDelayMs = getAutoNextDelayMs();
+    writeStoredString("questionbank.autoNextDelayMs", String(state.autoNextDelayMs));
+    rescheduleAutoNextForCurrentQuestion();
   });
   els.optionShortcutSelect.addEventListener("change", () => {
     state.optionShortcutMode = els.optionShortcutSelect.value;
@@ -244,7 +254,8 @@ function bindEvents() {
 }
 
 function loadSettings() {
-  state.autoNext = readStoredBoolean("questionbank.autoNext", true);
+  state.autoNext = readStoredBoolean("questionbank.autoNext", false);
+  state.autoNextDelayMs = readStoredClampedNumber("questionbank.autoNextDelayMs", 950, 0, 10000);
   state.optionShortcutMode = readStoredChoice("questionbank.optionShortcutMode", "number", [
     "number",
     "letter",
@@ -259,6 +270,7 @@ function loadSettings() {
   ]);
   state.navigationShortcutMode = readStoredChoice("questionbank.navigationShortcutMode", "arrows", ["arrows", "off"]);
   els.autoNextToggle.checked = state.autoNext;
+  els.autoNextDelayMs.value = String(state.autoNextDelayMs);
   els.optionShortcutSelect.value = state.optionShortcutMode;
   els.submitShortcutSelect.value = state.submitShortcutMode;
   els.navigationShortcutSelect.value = state.navigationShortcutMode;
@@ -293,6 +305,11 @@ function readStoredString(key, fallback) {
 function readStoredNumber(key, fallback) {
   const value = Number.parseInt(readStoredString(key, String(fallback)), 10);
   return Number.isFinite(value) && value > 0 ? value : fallback;
+}
+
+function readStoredClampedNumber(key, fallback, min, max) {
+  const value = Number.parseInt(readStoredString(key, String(fallback)), 10);
+  return Number.isFinite(value) ? clamp(value, min, max) : fallback;
 }
 
 function readStoredChoice(key, fallback, choices) {
@@ -765,6 +782,7 @@ function updateModeControls() {
   });
 
   els.autoNextSetting.classList.toggle("is-hidden", state.mode === "exam");
+  els.autoNextDelayField.classList.toggle("is-hidden", state.mode === "exam");
   if (state.mode === "exam") {
     clearAutoNextTimer();
   }
@@ -858,6 +876,14 @@ function getExamMinutes() {
   const minutes = clamp(Math.floor(value), 1, 24 * 60);
   els.examMinutes.value = String(minutes);
   return minutes;
+}
+
+function getAutoNextDelayMs() {
+  const value = Number(els.autoNextDelayMs.value);
+  const delay = Number.isFinite(value) ? Math.floor(value) : 950;
+  const clamped = clamp(delay, 0, 10000);
+  els.autoNextDelayMs.value = String(clamped);
+  return clamped;
 }
 
 function sampleQuestions(pool, count) {
@@ -1531,7 +1557,18 @@ function scheduleAutoNext(question, record) {
     if (current.id !== question.id || !currentRecord.checked) return;
 
     goRelative(1);
-  }, 950);
+  }, state.autoNextDelayMs);
+}
+
+function rescheduleAutoNextForCurrentQuestion() {
+  clearAutoNextTimer();
+  if (!state.autoNext || !state.session) return;
+
+  const question = getCurrentQuestion();
+  const record = getRecord(question);
+  if (record.checked && !record.revealed) {
+    scheduleAutoNext(question, record);
+  }
 }
 
 function clearAutoNextTimer() {

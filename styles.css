@@ -328,7 +328,8 @@ h3 {
 }
 
 .quantity-field.is-hidden,
-.exam-only-field.is-hidden {
+.exam-only-field.is-hidden,
+.auto-next-field.is-hidden {
   display: none;
 }
 

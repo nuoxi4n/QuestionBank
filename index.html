@@ -229,8 +229,12 @@
             </label>
             <label class="switch-setting" id="autoNextSetting">
               <span>提交后自动下一题</span>
-              <input id="autoNextToggle" type="checkbox" checked />
+              <input id="autoNextToggle" type="checkbox" />
               <span class="switch-track" aria-hidden="true"></span>
+            </label>
+            <label class="field auto-next-field" id="autoNextDelayField">
+              <span>下一题延迟（ms）</span>
+              <input id="autoNextDelayMs" type="number" min="0" max="10000" step="50" value="950" />
             </label>
           </div>
         </section>
