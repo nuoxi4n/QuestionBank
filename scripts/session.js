@@ -285,10 +285,6 @@ function renderStats() {
   const session = state.session;
   const total = session?.questions.length || 0;
   const examPending = Boolean(session && session.mode === "exam" && !session.submitted);
-  els.bankSize.textContent = String(state.bank.length);
-  els.answeredCount.textContent = String(stats.answered);
-  els.correctCount.textContent = String(stats.correct);
-  els.accuracyRate.textContent = `${stats.accuracy}%`;
   els.paletteAnswered.textContent = String(stats.answered);
   els.paletteRemaining.textContent = String(Math.max(total - stats.answered, 0));
   els.paletteAccuracyLabel.textContent = examPending ? "评分" : "正确率";

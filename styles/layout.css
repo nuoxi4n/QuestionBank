@@ -225,13 +225,6 @@
   background: rgba(255, 255, 255, 0.7);
 }
 
-.mini-stats {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.mini-stats div,
 .result-strip div,
 .result-metrics div {
   border: 1px solid var(--line-dark);
@@ -239,14 +232,6 @@
   background: rgba(255, 255, 255, 0.48);
 }
 
-.mini-stats div {
-  min-height: 72px;
-  padding: 12px;
-  display: grid;
-  align-content: space-between;
-}
-
-.mini-stats span,
 .result-strip span,
 .result-metrics span {
   color: var(--muted);
@@ -254,7 +239,6 @@
   font-weight: 700;
 }
 
-.mini-stats strong,
 .result-strip strong,
 .result-metrics strong {
   font-size: 23px;
