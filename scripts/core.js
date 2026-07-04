@@ -214,7 +214,7 @@ function bindEvents() {
 
 function loadSettings() {
   state.autoNext = readStoredBoolean("questionbank.autoNext", false);
-  state.answerShuffle = readStoredBoolean("questionbank.answerShuffle", false);
+  state.answerShuffle = readStoredBoolean("questionbank.answerShuffle", true);
   state.autoNextDelayMs = readStoredClampedNumber("questionbank.autoNextDelayMs", 3000, 0, 10000);
   state.focusLayout = readStoredBoolean("questionbank.focusLayout", true);
   state.optionShortcutMode = readStoredChoice("questionbank.optionShortcutMode", "number", [
