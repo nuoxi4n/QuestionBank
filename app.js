@@ -548,7 +548,7 @@ function applyUrlPreset() {
   const typeParam = getParam(params, ["type"]);
   const explicitMode = parseModeParam(getParam(params, ["mode", "m"]));
   const modeFromType = parseModeParam(typeParam);
-  const explicitQuestionType = parseQuestionTypeParam(getParam(params, ["qtype", "questionType", "question_type"]));
+  const explicitQuestionType = parseQuestionTypeParam(getParam(params, ["qtype"]));
   const questionTypeFromType = parseQuestionTypeParam(typeParam);
   const hasExamShortcut = params.has("exam");
   const hasRandomShortcut = params.has("random");
@@ -564,16 +564,14 @@ function applyUrlPreset() {
   }
 
   setSelectFromParam(els.questionTypeSelect, explicitQuestionType || questionTypeFromType);
-  setSelectFromParam(els.categorySelect, getParam(params, ["category", "cat"]));
-  setSelectFromParam(els.difficultySelect, parseDifficultyParam(getParam(params, ["difficulty", "level"])));
+  setSelectFromParam(els.categorySelect, getParam(params, ["category"]));
+  setSelectFromParam(els.difficultySelect, parseDifficultyParam(getParam(params, ["level"])));
 
-  const count = getPositiveInteger(getParam(params, ["count", "num", "n", "limit"]));
+  const count = getPositiveInteger(getParam(params, ["count"]));
   const examCount = getPositiveInteger(getParam(params, ["examCount", "exam_count"])) || getPositiveInteger(examShortcut);
   const randomCount =
     getPositiveInteger(getParam(params, ["randomCount", "random_count"])) || getPositiveInteger(randomShortcut);
-  const examMinutes = getPositiveInteger(
-    getParam(params, ["minutes", "examMinutes", "exam_minutes", "duration", "time"]),
-  );
+  const examMinutes = getPositiveInteger(getParam(params, ["minutes"]));
 
   if (count) {
     els.examCount.value = String(count);
@@ -591,7 +589,7 @@ function applyUrlPreset() {
   }
 
   updateModeControls();
-  return !isFalseParam(getParam(params, ["start", "autoStart", "autostart"]));
+  return !isFalseParam(getParam(params, ["start"]));
 }
 
 function getParam(params, names) {

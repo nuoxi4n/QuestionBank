@@ -68,22 +68,15 @@ http://127.0.0.1:5500/
 | `mode` | `sequence` / `random` / `exam` | 刷题模式：顺序、随机、模拟考试 |
 | `type` | `sequence` / `random` / `exam` / `single` / `multiple` / `qa` | 兼容写法；建议刷题模式优先用 `mode`，题型优先用 `qtype` |
 | `qtype` | `single` / `multiple` / `qa` | 题型筛选：单选、多选、问答 |
-| `questionType` | `single` / `multiple` / `qa` | `qtype` 的兼容写法 |
 | `category` | 题库中的分类名 | 分类筛选 |
-| `cat` | 题库中的分类名 | `category` 的兼容写法 |
-| `difficulty` | `easy` / `medium` / `hard` | 难度筛选 |
-| `level` | `easy` / `medium` / `hard` | `difficulty` 的兼容写法 |
+| `level` | `easy` / `medium` / `hard` | 难度筛选 |
 | `count` | 正整数 | 随机刷题或模拟考试抽题数量 |
-| `num` / `n` / `limit` | 正整数 | `count` 的兼容写法 |
 | `randomCount` | 正整数 | 随机刷题数量 |
 | `examCount` | 正整数 | 模拟考试题数 |
 | `minutes` | 正整数 | 模拟考试时长，单位分钟 |
-| `examMinutes` | 正整数 | `minutes` 的兼容写法 |
-| `duration` / `time` | 正整数 | `minutes` 的兼容写法 |
 | `random` | 空值或正整数 | 快捷进入随机刷题；传数字时同时作为题数 |
 | `exam` | 空值或正整数 | 快捷进入模拟考试；传数字时同时作为题数 |
 | `start` | `1` / `0` | `1` 自动开始，`0` 只应用设置 |
-| `autoStart` | `true` / `false` | `start` 的兼容写法 |
 
 ## 示例
 
@@ -108,7 +101,7 @@ http://127.0.0.1:5500/?mode=random&qtype=multiple&count=10&start=1
 只应用 CSS 中等难度问答题筛选，不立即开始：
 
 ```text
-http://127.0.0.1:5500/?mode=sequence&qtype=qa&category=CSS&difficulty=medium&start=0
+http://127.0.0.1:5500/?mode=sequence&qtype=qa&category=CSS&level=medium&start=0
 ```
 
 快捷写法：
