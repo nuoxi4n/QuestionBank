@@ -14,7 +14,6 @@ function collectElements() {
     startBtn: document.querySelector("#startBtn"),
     workspace: document.querySelector(".workspace"),
     settingsPanel: document.querySelector(".settings-panel"),
-    topSettingsBtn: document.querySelector("#topSettingsBtn"),
     openSettingsBtn: document.querySelector("#openSettingsBtn"),
     settingsDialog: document.querySelector("#settingsDialog"),
     closeSettingsBtn: document.querySelector("#closeSettingsBtn"),
@@ -112,7 +111,6 @@ function bindEvents() {
   });
 
   els.startBtn.addEventListener("click", () => startSession());
-  els.topSettingsBtn.addEventListener("click", openSettingsDialog);
   els.openSettingsBtn.addEventListener("click", openSettingsDialog);
   els.closeSettingsBtn.addEventListener("click", closeSettingsDialog);
   els.applySettingsBtn.addEventListener("click", closeSettingsDialog);
