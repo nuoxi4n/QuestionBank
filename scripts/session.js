@@ -562,10 +562,18 @@ function renderQuestionActions(record) {
 function renderPalette() {
   const session = state.session;
   if (!session) {
-    els.palette.innerHTML = "";
+    els.palette.classList.add("is-empty");
+    els.palette.innerHTML = `
+      <div class="palette-empty">
+        <i data-lucide="clipboard-list"></i>
+        <h3>答题卡待生成</h3>
+        <p>开始刷题后会显示题号与作答状态</p>
+      </div>
+    `;
     return;
   }
 
+  els.palette.classList.remove("is-empty");
   const indexes = getPaletteRenderIndexes(session.questions.length, session.currentIndex);
   let previousIndex = -1;
   const items = [];

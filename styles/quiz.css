@@ -315,6 +315,44 @@
   overflow: auto;
 }
 
+.question-palette.is-empty {
+  grid-template-columns: 1fr;
+  overflow: hidden;
+  padding-right: 0;
+}
+
+.palette-empty {
+  min-height: 160px;
+  border: 1px dashed rgba(54, 75, 105, 0.2);
+  border-radius: var(--radius);
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  color: var(--muted);
+  text-align: center;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.palette-empty svg {
+  width: 40px;
+  height: 40px;
+  color: var(--blue);
+}
+
+.palette-empty h3 {
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.palette-empty p {
+  margin: 0;
+  max-width: 180px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .palette-button {
   aspect-ratio: 1;
   min-width: 0;
