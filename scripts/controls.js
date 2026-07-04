@@ -42,25 +42,22 @@ function applyUrlPreset() {
   const params = new URLSearchParams(window.location.search);
   if (!params.size) return false;
 
-  const typeParam = getParam(params, ["type"]);
   const explicitMode = parseModeParam(getParam(params, ["mode", "m"]));
-  const modeFromType = parseModeParam(typeParam);
   const explicitQuestionType = parseQuestionTypeParam(getParam(params, ["qtype"]));
-  const questionTypeFromType = parseQuestionTypeParam(typeParam);
   const hasExamShortcut = params.has("exam");
   const hasRandomShortcut = params.has("random");
   const examShortcut = getParam(params, ["exam"]);
   const randomShortcut = getParam(params, ["random"]);
 
-  if (explicitMode || modeFromType) {
-    state.mode = explicitMode || modeFromType;
+  if (explicitMode) {
+    state.mode = explicitMode;
   } else if (hasExamShortcut) {
     state.mode = "exam";
   } else if (hasRandomShortcut) {
     state.mode = "random";
   }
 
-  setSelectFromParam(els.questionTypeSelect, explicitQuestionType || questionTypeFromType);
+  setSelectFromParam(els.questionTypeSelect, explicitQuestionType);
   setSelectFromParam(els.categorySelect, getParam(params, ["category"]));
   setSelectFromParam(els.difficultySelect, parseDifficultyParam(getParam(params, ["level"])));
 

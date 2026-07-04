@@ -113,7 +113,6 @@ scripts/interactions.js     作答交互、评分、导航、结果/确认弹窗
 | --- | --- | --- |
 | `mode` | `sequence` / `random` / `exam` | 刷题模式：顺序、随机、模拟考试 |
 | `bank` | `question-banks.json` 中的题库 `id` | 默认选中的题库 |
-| `type` | `sequence` / `random` / `exam` / `single` / `multiple` / `truefalse` / `qa` | 兼容写法；建议刷题模式优先用 `mode`，题型优先用 `qtype` |
 | `qtype` | `single` / `multiple` / `truefalse` / `qa` | 题型筛选：单选、多选、判断、问答 |
 | `category` | 题库中的分类名 | 分类筛选 |
 | `level` | `easy` / `medium` / `hard` | 难度筛选 |
