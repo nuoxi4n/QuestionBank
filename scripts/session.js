@@ -1,6 +1,13 @@
-function startSession(silent = false) {
+async function startSession(silent = false) {
   clearAutoNextTimer();
   clearExamTimer();
+
+  if (!(await ensureSelectedBankLoaded())) {
+    state.session = null;
+    renderAll();
+    return;
+  }
+
   const pool = getFilteredBank();
 
   if (!pool.length) {
@@ -84,13 +91,25 @@ function getFilteredBank() {
   const questionType = els.questionTypeSelect.value;
   const category = els.categorySelect.value;
   const difficulty = els.difficultySelect.value;
+  const cacheKey = [state.bankVersion, questionType, category, difficulty].join("|");
 
-  return state.bank.filter((question) => {
+  if (state.filterCache.key === cacheKey) {
+    return state.filterCache.questions;
+  }
+
+  const questions = state.bank.filter((question) => {
     const typeMatched = !questionType || question.type === questionType;
     const categoryMatched = !category || question.category === category;
     const difficultyMatched = !difficulty || question.difficulty === difficulty;
     return typeMatched && categoryMatched && difficultyMatched;
   });
+
+  state.filterCache = {
+    key: cacheKey,
+    questions,
+  };
+
+  return questions;
 }
 
 function getRequestedCount(input, max) {
@@ -274,7 +293,12 @@ function renderStats() {
   els.paletteRemaining.textContent = String(Math.max(total - stats.answered, 0));
   els.paletteAccuracyLabel.textContent = examPending ? "评分" : "正确率";
   els.paletteAccuracy.textContent = examPending ? "交卷后" : `${stats.accuracy}%`;
-  els.bankSource.textContent = `${state.source || "未载入"} · ${getFilteredBank().length} 题可用`;
+  if (!state.bank.length && !state.bankLoading) {
+    const source = findBankSource(state.selectedBankId);
+    els.bankSource.textContent = source ? `已选择 ${source.title}，点击开始加载题库` : "题库未加载";
+  } else if (!state.bankLoading) {
+    els.bankSource.textContent = `${state.source || "未载入"} · ${getFilteredBank().length} 题可用`;
+  }
   updateConfigSummary();
 }
 
@@ -282,6 +306,7 @@ function updateConfigSummary() {
   if (!els.configSummary) return;
 
   const poolSize = getFilteredBank().length;
+  const countLimit = state.bank.length ? Math.max(poolSize, 1) : Number.MAX_SAFE_INTEGER;
   const chips = [
     displayQuestionType(els.questionTypeSelect.value) || "全部题型",
     els.categorySelect.value || "全部分类",
@@ -293,11 +318,11 @@ function updateConfigSummary() {
   }
 
   if (state.mode === "random") {
-    chips.push(`随机 ${getRequestedCount(els.randomCount, Math.max(poolSize, 1))} 题`);
+    chips.push(`随机 ${getRequestedCount(els.randomCount, countLimit)} 题`);
   }
 
   if (state.mode === "exam") {
-    chips.push(`考试 ${getRequestedCount(els.examCount, Math.max(poolSize, 1))} 题`);
+    chips.push(`考试 ${getRequestedCount(els.examCount, countLimit)} 题`);
     chips.push(`${getExamMinutes()} 分钟`);
   }
 
@@ -541,17 +566,54 @@ function renderPalette() {
     return;
   }
 
-  els.palette.innerHTML = session.questions
-    .map((question, index) => {
-      const record = session.answers[question.id];
-      const classes = ["palette-button"];
-      if (hasAnswer(question, record)) classes.push("is-answered");
-      if (record?.checked && record.correct === true) classes.push("is-correct");
-      if (record?.checked && record.correct === false) classes.push("is-wrong");
-      if (record?.checked && record.correct === null) classes.push("is-review");
-      if (index === session.currentIndex) classes.push("is-active");
+  const indexes = getPaletteRenderIndexes(session.questions.length, session.currentIndex);
+  let previousIndex = -1;
+  const items = [];
 
-      return `<button class="${classes.join(" ")}" type="button" data-index="${index}">${index + 1}</button>`;
-    })
-    .join("");
+  indexes.forEach((index) => {
+    if (previousIndex >= 0 && index > previousIndex + 1) {
+      items.push(`<span class="palette-gap" aria-hidden="true">...</span>`);
+    }
+
+    const question = session.questions[index];
+    const record = session.answers[question.id];
+    const classes = ["palette-button"];
+    if (hasAnswer(question, record)) classes.push("is-answered");
+    if (record?.checked && record.correct === true) classes.push("is-correct");
+    if (record?.checked && record.correct === false) classes.push("is-wrong");
+    if (record?.checked && record.correct === null) classes.push("is-review");
+    if (index === session.currentIndex) classes.push("is-active");
+
+    items.push(`<button class="${classes.join(" ")}" type="button" data-index="${index}">${index + 1}</button>`);
+    previousIndex = index;
+  });
+
+  els.palette.innerHTML = items.join("");
+}
+
+function getPaletteRenderIndexes(total, currentIndex) {
+  const fullRenderLimit = 300;
+  if (total <= fullRenderLimit) {
+    return Array.from({ length: total }, (_, index) => index);
+  }
+
+  const edgeCount = 5;
+  const windowRadius = 45;
+  const indexes = new Set();
+
+  for (let index = 0; index < Math.min(edgeCount, total); index += 1) {
+    indexes.add(index);
+  }
+
+  for (let index = Math.max(0, total - edgeCount); index < total; index += 1) {
+    indexes.add(index);
+  }
+
+  const start = Math.max(0, currentIndex - windowRadius);
+  const end = Math.min(total - 1, currentIndex + windowRadius);
+  for (let index = start; index <= end; index += 1) {
+    indexes.add(index);
+  }
+
+  return [...indexes].sort((left, right) => left - right);
 }

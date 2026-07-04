@@ -175,7 +175,7 @@ function bindEvents() {
     renderAll();
     showToast(state.focusLayout ? "已开启专注布局" : "已关闭专注布局");
   });
-  els.bankSelect.addEventListener("change", () => loadSelectedBank(els.bankSelect.value));
+  els.bankSelect.addEventListener("change", () => selectBankSource(els.bankSelect.value));
   els.reloadBankBtn.addEventListener("click", () => reloadSelectedBank());
   els.bankFile.addEventListener("change", handleBankFile);
   els.prevBtn.addEventListener("click", () => goRelative(-1));

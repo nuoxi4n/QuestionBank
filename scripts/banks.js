@@ -1,9 +1,8 @@
 async function loadBankCatalog() {
-  els.bankSource.textContent = "题库读取中";
+  els.bankSource.textContent = "题库目录读取中";
 
   const sources = await loadBankSources();
   state.bankSources = sources;
-  populateBankSelect();
 
   const params = new URLSearchParams(window.location.search);
   const bankFromUrl = getParam(params, ["bank"]);
@@ -11,7 +10,11 @@ async function loadBankCatalog() {
   const selectedSource =
     findBankSource(bankFromUrl) || findBankSource(storedBankId) || state.bankSources[0];
 
-  await loadSelectedBank(selectedSource?.id || "");
+  selectBankSource(selectedSource?.id || "", { persist: false });
+
+  if (params.size) {
+    await loadSelectedBank(selectedSource?.id || "");
+  }
 }
 
 async function loadBankSources() {
@@ -53,28 +56,60 @@ function populateBankSelect() {
   }
 }
 
-async function loadSelectedBank(id) {
+function selectBankSource(id, options = {}) {
+  const source = findBankSource(id) || state.bankSources[0];
+  populateBankSelect();
+
+  if (!source) {
+    clearLoadedBank("未找到可用题库");
+    return null;
+  }
+
+  state.selectedBankId = source.id;
+  els.bankSelect.value = source.id;
+
+  if (options.persist !== false) {
+    writeStoredString("questionbank.selectedBankId", source.id);
+  }
+
+  if (state.loadedBankId !== source.id) {
+    clearLoadedBank(`已选择 ${source.title}，点击开始加载题库`);
+  }
+
+  return source;
+}
+
+async function loadSelectedBank(id, options = {}) {
   const source = findBankSource(id) || state.bankSources[0];
   if (!source) {
-    setBank(normalizeBank(FALLBACK_QUESTIONS), "内置示例题库", { bankId: "fallback" });
+    setBank(normalizeBank(FALLBACK_QUESTIONS), "内置示例题库", { bankId: "fallback", autoStart: options.autoStart });
     showToast("未找到可用题库，已使用内置示例题库");
-    return;
+    return true;
   }
 
   state.selectedBankId = source.id;
   els.bankSelect.value = source.id;
   writeStoredString("questionbank.selectedBankId", source.id);
-  els.bankSource.textContent = "题库读取中";
+  setBankLoading(true, `${source.title} 读取中`);
+  const loadToken = ++state.bankLoadToken;
 
   try {
     const bank = source.bank || (await fetchBank(source.url));
-    setBank(bank, source.title, { bankId: source.id });
+    if (loadToken !== state.bankLoadToken) return false;
+    setBank(bank, source.title, { bankId: source.id, autoStart: options.autoStart });
     showToast(`已切换到 ${source.title}`);
+    return true;
   } catch (error) {
+    if (loadToken !== state.bankLoadToken) return false;
     const bank = normalizeBank(FALLBACK_QUESTIONS);
-    setBank(bank, "内置示例题库", { bankId: "fallback" });
+    setBank(bank, "内置示例题库", { bankId: "fallback", autoStart: options.autoStart });
     showToast(`未能读取 ${source.title}，已使用内置示例题库`);
     console.warn(error);
+    return true;
+  } finally {
+    if (loadToken === state.bankLoadToken) {
+      setBankLoading(false);
+    }
   }
 }
 
@@ -89,6 +124,14 @@ async function reloadSelectedBank() {
   }
 
   await loadSelectedBank(source.id);
+}
+
+async function ensureSelectedBankLoaded() {
+  if (state.bank.length && state.loadedBankId === state.selectedBankId) {
+    return true;
+  }
+
+  return loadSelectedBank(state.selectedBankId, { autoStart: false });
 }
 
 async function fetchBank(url) {
@@ -144,6 +187,8 @@ function addImportedBankSource(fileName, bank) {
 function setBank(bank, source, options = {}) {
   state.bank = bank;
   state.source = source;
+  state.loadedBankId = options.bankId || state.selectedBankId;
+  invalidateFilterCache();
   if (options.bankId) {
     state.selectedBankId = options.bankId;
     if (findBankSource(options.bankId)) {
@@ -159,11 +204,42 @@ function setBank(bank, source, options = {}) {
   }
   updateQuantityLimits();
 
-  if (shouldStart) {
+  if (shouldStart && options.autoStart !== false) {
     startSession(true);
   } else {
     state.session = null;
     renderAll();
+  }
+}
+
+function clearLoadedBank(message) {
+  clearAutoNextTimer();
+  clearExamTimer();
+  state.bank = [];
+  state.source = "";
+  state.loadedBankId = "";
+  state.session = null;
+  invalidateFilterCache();
+  populateFilters();
+  updateQuantityLimits();
+  renderAll();
+  els.bankSource.textContent = message || "题库未加载";
+}
+
+function invalidateFilterCache() {
+  state.bankVersion += 1;
+  state.filterCache = {
+    key: "",
+    questions: [],
+  };
+}
+
+function setBankLoading(loading, message = "") {
+  state.bankLoading = loading;
+  els.startBtn.disabled = loading;
+  els.reloadBankBtn.disabled = loading;
+  if (message) {
+    els.bankSource.textContent = message;
   }
 }
 

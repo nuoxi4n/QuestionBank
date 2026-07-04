@@ -187,6 +187,11 @@ function updateModeControls() {
 function updateQuantityLimits() {
   const poolSize = getFilteredBank().length;
   [els.randomCount, els.examCount].forEach((input) => {
+    if (!state.bank.length) {
+      input.removeAttribute("max");
+      return;
+    }
+
     input.max = String(Math.max(poolSize, 1));
     const current = Number(input.value) || 1;
     input.value = String(clamp(current, 1, Math.max(poolSize, 1)));

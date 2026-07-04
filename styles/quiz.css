@@ -350,6 +350,14 @@
   background: rgba(255, 245, 218, 0.92);
 }
 
+.palette-gap {
+  min-height: 40px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-weight: 900;
+}
+
 .result-strip {
   margin-top: auto;
   display: grid;
