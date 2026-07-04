@@ -82,9 +82,9 @@ function selectBankSource(id, options = {}) {
 async function loadSelectedBank(id, options = {}) {
   const source = findBankSource(id) || state.bankSources[0];
   if (!source) {
-    setBank(normalizeBank(FALLBACK_QUESTIONS), "内置示例题库", { bankId: "fallback", autoStart: options.autoStart });
-    showToast("未找到可用题库，已使用内置示例题库");
-    return true;
+    clearLoadedBank("未找到可用题库");
+    showToast("未找到可用题库");
+    return false;
   }
 
   state.selectedBankId = source.id;
@@ -101,11 +101,10 @@ async function loadSelectedBank(id, options = {}) {
     return true;
   } catch (error) {
     if (loadToken !== state.bankLoadToken) return false;
-    const bank = normalizeBank(FALLBACK_QUESTIONS);
-    setBank(bank, "内置示例题库", { bankId: "fallback", autoStart: options.autoStart });
-    showToast(`未能读取 ${source.title}，已使用内置示例题库`);
+    clearLoadedBank(`未能读取 ${source.title}`);
+    showToast(`未能读取 ${source.title}`);
     console.warn(error);
-    return true;
+    return false;
   } finally {
     if (loadToken === state.bankLoadToken) {
       setBankLoading(false);

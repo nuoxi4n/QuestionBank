@@ -78,7 +78,6 @@ button {
   background: var(--soft);
   box-shadow: var(--shadow);
   backdrop-filter: blur(28px) saturate(155%);
-  -webkit-backdrop-filter: blur(28px) saturate(155%);
 }
 
 .topbar {

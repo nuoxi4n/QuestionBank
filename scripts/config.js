@@ -108,58 +108,6 @@ const DEFAULT_BANK_SOURCES = [
   },
 ];
 
-const FALLBACK_QUESTIONS = [
-  {
-    id: "F001",
-    type: "single",
-    category: "前端基础",
-    level: "easy",
-    stem: "HTML 中用于引入外部样式表的标签是？",
-    options: [
-      { key: "A", text: "<script>" },
-      { key: "B", text: "<link>" },
-      { key: "C", text: "<style-src>" },
-      { key: "D", text: "<css>" },
-    ],
-    answer: ["B"],
-    explanation: "<link rel=\"stylesheet\" href=\"...\"> 用于引入外部 CSS 文件。",
-  },
-  {
-    id: "F002",
-    type: "multiple",
-    category: "JavaScript",
-    level: "medium",
-    stem: "以下哪些方法会返回一个新数组？",
-    options: [
-      { key: "A", text: "map" },
-      { key: "B", text: "filter" },
-      { key: "C", text: "push" },
-      { key: "D", text: "slice" },
-    ],
-    answer: ["A", "B", "D"],
-    explanation: "map、filter、slice 都会返回新数组，push 会修改原数组并返回新长度。",
-  },
-  {
-    id: "F003",
-    type: "truefalse",
-    category: "JavaScript",
-    level: "easy",
-    stem: "const 声明的变量不能被重新赋值。",
-    answer: true,
-    explanation: "const 声明的绑定不可重新赋值，但对象或数组内部成员仍可能被修改。",
-  },
-  {
-    id: "F004",
-    type: "qa",
-    category: "浏览器",
-    level: "medium",
-    stem: "简述 localStorage 与 sessionStorage 的主要区别。",
-    answer: "localStorage 数据长期保存，除非主动清除；sessionStorage 只在当前页面会话中保存，标签页关闭后通常会被清除。",
-    keywords: ["localStorage", "sessionStorage", "关闭"],
-    explanation: "二者都属于 Web Storage，同源隔离，容量通常比 Cookie 更大。",
-  },
-];
-
 const state = {
   bank: [],
   bankSources: [],

@@ -393,20 +393,16 @@ function showResultDialog() {
   els.resultCorrect.textContent = String(stats.correct);
   els.resultReview.textContent = String(stats.review);
 
-  if (!els.resultDialog.open && typeof els.resultDialog.showModal === "function") {
+  if (!els.resultDialog.open) {
     els.resultDialog.showModal();
-  } else {
-    els.resultDialog.setAttribute("open", "");
   }
 
   refreshIcons();
 }
 
 function closeResultDialog() {
-  if (els.resultDialog.open && typeof els.resultDialog.close === "function") {
+  if (els.resultDialog.open) {
     els.resultDialog.close();
-  } else {
-    els.resultDialog.removeAttribute("open");
   }
 }
 
@@ -416,10 +412,8 @@ function requestConfirm({ title, message, confirmLabel = "确认" }) {
   els.confirmMessage.textContent = message;
   els.confirmOkBtn.querySelector("span").textContent = confirmLabel;
 
-  if (!els.confirmDialog.open && typeof els.confirmDialog.showModal === "function") {
+  if (!els.confirmDialog.open) {
     els.confirmDialog.showModal();
-  } else {
-    els.confirmDialog.setAttribute("open", "");
   }
 
   refreshIcons();
@@ -430,10 +424,8 @@ function requestConfirm({ title, message, confirmLabel = "确认" }) {
 }
 
 function closeConfirmDialog(confirmed) {
-  if (els.confirmDialog.open && typeof els.confirmDialog.close === "function") {
+  if (els.confirmDialog.open) {
     els.confirmDialog.close();
-  } else {
-    els.confirmDialog.removeAttribute("open");
   }
 
   if (confirmResolver) {

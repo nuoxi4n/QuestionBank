@@ -236,12 +236,12 @@ function loadSettings() {
   els.examMinutes.value = String(readStoredNumber("questionbank.examMinutes", 45));
 }
 
-function readStoredBoolean(key, fallback) {
+function readStoredBoolean(key, defaultValue) {
   try {
     const value = window.localStorage.getItem(key);
-    return value === null ? fallback : value === "true";
+    return value === null ? defaultValue : value === "true";
   } catch {
-    return fallback;
+    return defaultValue;
   }
 }
 
@@ -253,27 +253,27 @@ function writeStoredBoolean(key, value) {
   }
 }
 
-function readStoredString(key, fallback) {
+function readStoredString(key, defaultValue) {
   try {
-    return window.localStorage.getItem(key) || fallback;
+    return window.localStorage.getItem(key) || defaultValue;
   } catch {
-    return fallback;
+    return defaultValue;
   }
 }
 
-function readStoredNumber(key, fallback) {
-  const value = Number.parseInt(readStoredString(key, String(fallback)), 10);
-  return Number.isFinite(value) && value > 0 ? value : fallback;
+function readStoredNumber(key, defaultValue) {
+  const value = Number.parseInt(readStoredString(key, String(defaultValue)), 10);
+  return Number.isFinite(value) && value > 0 ? value : defaultValue;
 }
 
-function readStoredClampedNumber(key, fallback, min, max) {
-  const value = Number.parseInt(readStoredString(key, String(fallback)), 10);
-  return Number.isFinite(value) ? clamp(value, min, max) : fallback;
+function readStoredClampedNumber(key, defaultValue, min, max) {
+  const value = Number.parseInt(readStoredString(key, String(defaultValue)), 10);
+  return Number.isFinite(value) ? clamp(value, min, max) : defaultValue;
 }
 
-function readStoredChoice(key, fallback, choices) {
-  const value = readStoredString(key, fallback);
-  return choices.includes(value) ? value : fallback;
+function readStoredChoice(key, defaultValue, choices) {
+  const value = readStoredString(key, defaultValue);
+  return choices.includes(value) ? value : defaultValue;
 }
 
 function writeStoredString(key, value) {
@@ -289,19 +289,15 @@ function persistExamMinutes() {
 }
 
 function openSettingsDialog() {
-  if (typeof els.settingsDialog.showModal === "function") {
+  if (!els.settingsDialog.open) {
     els.settingsDialog.showModal();
-  } else {
-    els.settingsDialog.setAttribute("open", "");
   }
   refreshIcons();
 }
 
 function closeSettingsDialog() {
-  if (els.settingsDialog.open && typeof els.settingsDialog.close === "function") {
+  if (els.settingsDialog.open) {
     els.settingsDialog.close();
-  } else {
-    els.settingsDialog.removeAttribute("open");
   }
 }
 
