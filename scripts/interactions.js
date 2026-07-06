@@ -471,10 +471,21 @@ function isCurrentLocked(record) {
 }
 
 function formatChoiceAnswer(question) {
-  const optionMap = new Map(question.options.map((option) => [option.key, option.text]));
-  return (question.answer || [])
-    .map((key) => `${key}. ${optionMap.get(key) || ""}`.trim())
-    .join("\n");
+  const answerKeys = new Set((question.answer || []).map(normalizeChoiceKey));
+  const displayedKeys = new Set();
+  const orderedAnswers = question.options
+    .filter((option) => {
+      const key = normalizeChoiceKey(option.key);
+      const isAnswer = answerKeys.has(key);
+      if (isAnswer) displayedKeys.add(key);
+      return isAnswer;
+    })
+    .map((option) => `${option.key}. ${option.text}`.trim());
+  const missingAnswers = [...answerKeys]
+    .filter((key) => !displayedKeys.has(key))
+    .map((key) => `${key}.`.trim());
+
+  return [...orderedAnswers, ...missingAnswers].join("\n");
 }
 
 function clamp(value, min, max) {
